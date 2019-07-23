@@ -17,6 +17,7 @@
 3.个人库搜索：<br>
   &nbsp;&nbsp;&nbsp;&nbsp;
   用户保存链接时，自动生成链接的内容概要，搜索时显示概要信息；<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;
   可生成资料图表，可视化个人库的当前形态.<br>
 4.智能资料链接推荐：<br>
   &nbsp;&nbsp;&nbsp;&nbsp;
