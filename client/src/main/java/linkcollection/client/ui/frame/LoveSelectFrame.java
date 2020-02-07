@@ -104,8 +104,10 @@ public class LoveSelectFrame extends JFrame implements ImageButtonListener {
         if (flag.equals(submit.path)) {
             String loves = getLoves();
             UserFrame.refreshLoves(getLovesInChinese(loves));
+            WidgetConstant.setVisibleSize(800,600);
             PushAdapter.refreshInstance(loves);
             MainContentPanel.showPushContent();
+            WidgetConstant.rollBackVisibleSize();
             Info.refreshLoves(loves);
             dispose();
             return;

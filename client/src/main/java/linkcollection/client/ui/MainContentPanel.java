@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 @SuppressWarnings("ALL")
 public class MainContentPanel extends JPanel {
@@ -164,6 +166,25 @@ public class MainContentPanel extends JPanel {
                 }
             }
         });
+
+        input.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyChar() == (KeyEvent.VK_ENTER) && input.isFocusable()) {
+                    search(input, type);
+                }
+            }
+        });
         submit.setBounds(217, 0, 30, 30);
         container.add(input);
         container.add(submit);
@@ -172,19 +193,23 @@ public class MainContentPanel extends JPanel {
         search.setBorder(WidgetConstant.BottomBorder);
         instance.add(search);
         submit.addClickListener(flag -> {
-            key = input.getText();
-            switch (type) {
-                case 1:
-                    ItemAdapter.refreshInstance(Search.searchInLocal(key));
-                    showMyContent();
-                    break;
-                case 2:
-                    SearchAdapter.refreshInstance(key);
-                    MainContentPanel.showOtherContent();
-                    break;
-            }
+            search(input, type);
         });
         instance.repaint();
+    }
+
+    private static void search(JTextField input, int type) {
+        key = input.getText();
+        switch (type) {
+            case 1:
+                ItemAdapter.refreshInstance(Search.searchInLocal(key));
+                showMyContent();
+                break;
+            case 2:
+                SearchAdapter.refreshInstance(key);
+                MainContentPanel.showOtherContent();
+                break;
+        }
     }
 
     public void select(String name) {

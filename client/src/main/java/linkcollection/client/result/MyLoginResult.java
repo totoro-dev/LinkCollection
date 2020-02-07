@@ -6,6 +6,7 @@ import linkcollection.client.ui.bar.MainActionBar;
 import linkcollection.client.ui.frame.LoginFrame;
 import linkcollection.client.ui.frame.MainFrame;
 import linkcollection.client.ui.widgets.Toast;
+import linkcollection.client.ui.widgets.WidgetConstant;
 import linkcollection.client.ui.widgets.adapter.LabelAdapter;
 import linkcollection.client.ui.widgets.adapter.PushAdapter;
 import linkcollection.client.ui.widgets.view.RecyclerView;
@@ -31,7 +32,9 @@ public class MyLoginResult implements LoginResult {
         MainActionBar.setUserName(Info.getUserName());
         new RecyclerView(LeftSelectBar.recycleLabelPanel).setAdapter(new LabelAdapter());
         LeftSelectBar.scrollPane.getViewport().add(LeftSelectBar.recycleLabelPanel);
+        WidgetConstant.setVisibleSize(800,600);
         PushAdapter.refreshInstance(Info.getLoveInfo());
         MainContentPanel.showPushContent();
+        WidgetConstant.rollBackVisibleSize();
     }
 }
