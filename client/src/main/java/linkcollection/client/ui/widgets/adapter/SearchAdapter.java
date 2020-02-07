@@ -14,6 +14,9 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 全网搜索的列表适配器
+ */
 @SuppressWarnings("ALL")
 public class SearchAdapter extends Adapter<SearchAdapter.ViewHolder> {
 

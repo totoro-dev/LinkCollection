@@ -14,6 +14,7 @@ public class RecyclerView {
     }
 
     public void setAdapter(Adapter adapter) {
+        context.removeAll();
         int count = adapter.getItemCount();
         int height = 0;
         for (int i = 0; i < count; i++) {

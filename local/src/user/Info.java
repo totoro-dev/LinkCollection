@@ -1,9 +1,12 @@
 package user;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import entry.CollectionInfo;
+import entry.SearchInfo;
 import linkcollection.common.constans.Constans;
 import linkcollection.retrofit.LinkController;
+import linkcollection.retrofit.PushController;
 import linkcollection.retrofit.UserController;
 import search.service.SearchService;
 import top.totoro.file.core.TFile;
@@ -237,5 +240,29 @@ public class Info {
         }
         TWriter writer = new TWriter(TFile.getProperty());
         writer.write(info);
+    }
+
+    public static LinkedList<SearchInfo> getPushContent(String types) {
+        LinkedList<SearchInfo> result = new LinkedList<>();
+        String info = PushController.instance().select(types);
+        if (info == null) return result;
+        JSONArray array = JSONArray.parseArray(info);
+        if (array != null && array.size() > 0) {
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject object = JSONObject.parseObject((String) array.get(i));
+                if (object != null && !object.isEmpty()) {
+                    String linkId = object.getString("id");
+                    String link = object.getString("link");
+                    String labels = object.getString("labels");
+                    String title = object.getString("title");
+                    result.add(new SearchInfo(linkId, link, labels, title));
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getPushContent("science,computer"));
     }
 }

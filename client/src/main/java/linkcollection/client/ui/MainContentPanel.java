@@ -5,6 +5,7 @@ import linkcollection.client.ui.widgets.ContentBarItem;
 import linkcollection.client.ui.widgets.ImageButton;
 import linkcollection.client.ui.widgets.WidgetConstant;
 import linkcollection.client.ui.widgets.adapter.ItemAdapter;
+import linkcollection.client.ui.widgets.adapter.PushAdapter;
 import linkcollection.client.ui.widgets.adapter.SearchAdapter;
 import linkcollection.client.ui.widgets.view.RecyclerView;
 import search.Search;
@@ -93,6 +94,8 @@ public class MainContentPanel extends JPanel {
         closeView();
         instance.select("推荐");
         instance.add(PushScrollPanel);
+        RecyclerView contentView = new RecyclerView(PushContentPanel);
+        contentView.setAdapter(PushAdapter.getInstance());
         PushScrollPanel.getViewport().add(PushContentPanel);
     }
 
@@ -100,7 +103,6 @@ public class MainContentPanel extends JPanel {
         closeView();
         instance.select("我的");
         instance.add(MyScrollPanel);
-        MyContentPanel.removeAll();
         RecyclerView contentView = new RecyclerView(MyContentPanel);
         contentView.setAdapter(ItemAdapter.getInstance());
         MyScrollPanel.getViewport().add(MyContentPanel);
@@ -110,7 +112,6 @@ public class MainContentPanel extends JPanel {
         closeView();
         instance.select("搜索");
         instance.add(OtherScrollPanel);
-        OtherContentPanel.removeAll();
         RecyclerView contentView = new RecyclerView(OtherContentPanel);
         contentView.setAdapter(SearchAdapter.getInstance());
         OtherScrollPanel.getViewport().add(OtherContentPanel);

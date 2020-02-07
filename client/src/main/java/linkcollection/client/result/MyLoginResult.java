@@ -1,11 +1,13 @@
 package linkcollection.client.result;
 
+import linkcollection.client.ui.MainContentPanel;
 import linkcollection.client.ui.bar.LeftSelectBar;
 import linkcollection.client.ui.bar.MainActionBar;
 import linkcollection.client.ui.frame.LoginFrame;
 import linkcollection.client.ui.frame.MainFrame;
 import linkcollection.client.ui.widgets.Toast;
 import linkcollection.client.ui.widgets.adapter.LabelAdapter;
+import linkcollection.client.ui.widgets.adapter.PushAdapter;
 import linkcollection.client.ui.widgets.view.RecyclerView;
 import linkcollection.common.interfaces.LoginResult;
 import user.Info;
@@ -29,5 +31,7 @@ public class MyLoginResult implements LoginResult {
         MainActionBar.setUserName(Info.getUserName());
         new RecyclerView(LeftSelectBar.recycleLabelPanel).setAdapter(new LabelAdapter());
         LeftSelectBar.scrollPane.getViewport().add(LeftSelectBar.recycleLabelPanel);
+        PushAdapter.refreshInstance(Info.getLoveInfo());
+        MainContentPanel.showPushContent();
     }
 }

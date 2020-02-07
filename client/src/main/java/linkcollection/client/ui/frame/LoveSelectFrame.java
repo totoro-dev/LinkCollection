@@ -1,9 +1,11 @@
 package linkcollection.client.ui.frame;
 
+import linkcollection.client.ui.MainContentPanel;
 import linkcollection.client.ui.bar.DefaultActionBar;
 import linkcollection.client.ui.widgets.ImageButton;
 import linkcollection.client.ui.widgets.ImageButtonListener;
 import linkcollection.client.ui.widgets.WidgetConstant;
+import linkcollection.client.ui.widgets.adapter.PushAdapter;
 import user.Info;
 import user.Login;
 
@@ -102,6 +104,8 @@ public class LoveSelectFrame extends JFrame implements ImageButtonListener {
         if (flag.equals(submit.path)) {
             String loves = getLoves();
             UserFrame.refreshLoves(getLovesInChinese(loves));
+            PushAdapter.refreshInstance(loves);
+            MainContentPanel.showPushContent();
             Info.refreshLoves(loves);
             dispose();
             return;
