@@ -92,6 +92,23 @@ public class LinkSearchServiceImpl implements LinkSearchService {
         return "";
     }
 
+    @Override
+    public String getLinkIdByLink(String link) {
+        long linkId;
+        String all[] = linkCheckService.selectAllLinksByLink(link);
+        if (all != null) {
+            for (String l :
+                    all) {
+                String tmp = l.substring(0, l.lastIndexOf(":"));
+                if (!"".equals(tmp) && tmp.equals(link)) {
+                    linkId = Long.parseLong(l.substring(l.lastIndexOf(":") + 1));
+                    return linkId + "";
+                }
+            }
+        }
+        return "";
+    }
+
     /**
      * 搜索内容，TODO：可以做成多线程搜索，支持ES高并发等特点
      *
@@ -109,7 +126,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
 
     @Override
     public LinkSearchInfo searchById(String linkId) {
-        return linkSearchRepository.findById(linkId).get();
+        return linkSearchRepository.findById(Long.parseLong(linkId)).get();
     }
 
     /**
@@ -120,7 +137,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
      */
     @Override
     public boolean delete(String id) {
-        linkSearchRepository.deleteById(id);
+        linkSearchRepository.deleteById(Long.parseLong(id));
         return true;
     }
 

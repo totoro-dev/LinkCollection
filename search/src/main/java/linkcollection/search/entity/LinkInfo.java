@@ -59,4 +59,5 @@ public class LinkInfo  implements Serializable {
     public void setLabel_3(String label_3) {
         this.label_3 = label_3;
     }
+
 }

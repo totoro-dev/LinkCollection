@@ -2,6 +2,7 @@ package linkcollection.search.controller;
 
 import linkcollection.search.entity.LinkInfo;
 import linkcollection.search.entity.LinkSearchInfo;
+import linkcollection.search.service.LinkCheckService;
 import linkcollection.search.service.LinkInfoService;
 import linkcollection.search.service.LinkSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,23 @@ public class LinkSearchController {
     @Autowired
     private LinkInfoService linkInfoService;
 
+    @Autowired
+    private LinkCheckService linkCheckService;
+
+    @RequestMapping("/exist")
+    public String exist(@RequestParam("link") String link) {
+        return linkCheckService.existLink(link)+"";
+    }
+
     @RequestMapping("/delete")
-    public String delete(@RequestParam("linkId")String linkId){
+    public String delete(@RequestParam("linkId") String linkId) {
         linkSearchService.delete(linkId);
         return "已删除";
     }
 
     /**
      * 返回这个链接的id
+     *
      * @param userId
      * @param link
      * @param label
@@ -37,6 +47,13 @@ public class LinkSearchController {
         searchInfo.setLink(link);
         searchInfo.setLabels(label);
         return linkSearchService.put(Long.parseLong(userId), searchInfo);
+    }
+
+    @RequestMapping("/searchAllByLink")
+    public LinkInfo searchAllByLink(@RequestParam("link") String link) {
+        String linkId = linkSearchService.getLinkIdByLink(link);
+        if (linkId == null || linkId.equals("")) return null;
+        return linkInfoService.selectAll(Long.parseLong(linkId));
     }
 
     @RequestMapping("/search")
@@ -51,23 +68,25 @@ public class LinkSearchController {
 
     /**
      * 获取一个链接地址
+     *
      * @param linkId
      * @return
      */
     @RequestMapping("/selectLink")
-    public String selectLink(@RequestParam("linkId") String linkId){
-        if (linkId == null|| "".equals(linkId)) return null;
+    public String selectLink(@RequestParam("linkId") String linkId) {
+        if (linkId == null || "".equals(linkId)) return null;
         return linkInfoService.selectLinkByLinkId(Long.parseLong(linkId));
     }
 
     /**
      * 获取链接的全部信息
+     *
      * @param linkId
      * @return
      */
     @RequestMapping("/selectAll")
-    public LinkInfo selectAll(@RequestParam("linkId") String linkId){
-        if (linkId == null|| "".equals(linkId)) return null;
+    public LinkInfo selectAll(@RequestParam("linkId") String linkId) {
+        if (linkId == null || "".equals(linkId)) return null;
         return linkInfoService.selectAll(Long.parseLong(linkId));
     }
 
