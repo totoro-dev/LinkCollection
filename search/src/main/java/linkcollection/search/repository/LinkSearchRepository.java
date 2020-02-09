@@ -11,11 +11,15 @@ import java.util.List;
 @Document(
         indexName = "link-collection",//要小写 代表数据库
         type = "link",//要小写 代表表
-        shards = 1,replicas = 0)
-public interface LinkSearchRepository extends ElasticsearchRepository<LinkSearchInfo, String> {
+        shards = 1, replicas = 0)
+public interface LinkSearchRepository extends ElasticsearchRepository<LinkSearchInfo, Long> {
     List<LinkSearchInfo> findByTitleLikeOrLabelsLike(String key);
+
     List<LinkSearchInfo> findByTitleContains(String key);
+
     List<LinkSearchInfo> findByLabelsContains(String key);
+
     List<LinkSearchInfo> findByContentContains(String key);
+
     List<LinkSearchInfo> findBySummaryContains(String key);
 }
