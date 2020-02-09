@@ -22,8 +22,24 @@ public class LabelAdapter extends Adapter<LabelAdapter.LabelHolder> {
     private List<CollectionInfo> data;
     private List<String> labelList = new LinkedList<>();
 
-    public LabelAdapter() {
-        data = Info.getCollectionInfos();
+    private static LabelAdapter instance;
+    public static LabelAdapter getInstance(){
+        return instance;
+    }
+    public static void refreshInstance(List<CollectionInfo> list) {
+        instance = new LabelAdapter(list);
+    }
+
+    private LabelAdapter(){
+        if (instance == null){
+            data = new LinkedList<>();
+            instance = new LabelAdapter();
+        }
+    }
+
+    public LabelAdapter(List<CollectionInfo> data) {
+        this.data = data;
+        itemMap.clear();
         if (data == null || data.size() == 0) return;
         String labelJoin = "";
         for (CollectionInfo info :
@@ -32,7 +48,8 @@ public class LabelAdapter extends Adapter<LabelAdapter.LabelHolder> {
             for (String l :
                     ls) {
                 if (labelJoin.equals("," + l) || labelJoin.endsWith("," + l) || labelJoin.contains("," + l + ",")) {
-                    continue;
+
+//                    continue;
                 } else {
                     labelJoin += "," + l;
                     labelList.add(l);

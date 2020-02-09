@@ -32,7 +32,8 @@ public class MyLoginResult implements LoginResult {
     @Override
     public void loginSuccess(String s) {
         MainActionBar.setUserName(Info.getUserName());
-        new RecyclerView(LeftSelectBar.recycleLabelPanel).setAdapter(new LabelAdapter());
+        LabelAdapter.refreshInstance(Info.getCollectionInfos());
+        new RecyclerView(LeftSelectBar.recycleLabelPanel).setAdapter(LabelAdapter.getInstance());
         LeftSelectBar.scrollPane.getViewport().add(LeftSelectBar.recycleLabelPanel);
         WidgetConstant.setVisibleSize(800, 600);
         PushAdapter.refreshInstance(Info.getLoveInfo());

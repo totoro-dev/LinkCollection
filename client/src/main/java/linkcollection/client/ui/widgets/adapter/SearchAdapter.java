@@ -54,7 +54,7 @@ public class SearchAdapter extends Adapter<SearchAdapter.ViewHolder> {
         SearchInfo info = data.get(position);
         viewHolder.title.setText("<html><u>" + info.getTitle() + "</u></html>");
         viewHolder.link.setText(info.getLink());
-        viewHolder.labels.setText(info.getLabels());
+        viewHolder.labels.setText(info.getLabels().replace(",", "，"));
         viewHolder.title.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

@@ -15,7 +15,7 @@ public class LeftSelectBar extends JPanel implements ImageButtonListener {
     private JPanel container = new JPanel(null);
     private JPanel top = new JPanel(null);
     public static JPanel recycleLabelPanel = new JPanel(null);
-    ;
+
     public static JScrollPane scrollPane = new JScrollPane();
     private ImageButton collection_selected;
     private ImageButton favor_selected;
