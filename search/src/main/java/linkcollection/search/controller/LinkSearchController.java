@@ -2,6 +2,7 @@ package linkcollection.search.controller;
 
 import linkcollection.search.entity.LinkInfo;
 import linkcollection.search.entity.LinkSearchInfo;
+import linkcollection.search.service.LinkCheckService;
 import linkcollection.search.service.LinkInfoService;
 import linkcollection.search.service.LinkSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,13 @@ public class LinkSearchController {
     @Autowired
     private LinkInfoService linkInfoService;
 
+    @Autowired
+    private LinkCheckService linkCheckService;
+
+    @RequestMapping("/exist")
+    public String exist(@RequestParam("link") String link) {
+        return linkCheckService.existLink(link)+"";
+    }
     @RequestMapping("/delete")
     public String delete(@RequestParam("linkId")String linkId){
         linkSearchService.delete(linkId);
@@ -37,6 +45,13 @@ public class LinkSearchController {
         searchInfo.setLink(link);
         searchInfo.setLabels(label);
         return linkSearchService.put(Long.parseLong(userId), searchInfo);
+    }
+
+    @RequestMapping("/searchAllByLink")
+    public LinkInfo searchAllByLink(@RequestParam("link") String link) {
+        String linkId = linkSearchService.getLinkIdByLink(link);
+        if (linkId == null || linkId.equals("")) return null;
+        return linkInfoService.selectAll(Long.parseLong(linkId));
     }
 
     @RequestMapping("/search")

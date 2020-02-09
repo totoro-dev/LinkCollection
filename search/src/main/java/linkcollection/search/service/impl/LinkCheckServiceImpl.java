@@ -47,8 +47,7 @@ public class LinkCheckServiceImpl implements LinkCheckService {
     public boolean existLink(String link) {
         LinkCheckInfo checkInfo = GenerateInfo.generateLinkCheckInfo(link);
         String all = linkCheckMapper.selectAllLinksByLink(checkInfo);
-        System.out.println(all);
-        if (all != null && all.contains(link+":")) {
+        if (all != null && all.contains(link + ":")) {
             return true;
         }
         return false;
@@ -69,7 +68,7 @@ public class LinkCheckServiceImpl implements LinkCheckService {
     public boolean insertNewLinkCheckInfo(String link) {
         if (link != null && !"".equals(link)) {
             LinkCheckInfo checkInfo = GenerateInfo.generateLinkCheckInfo(link);
-            checkInfo.setLinks(link + ":"+(LinkInfoServiceImpl.lastLinkId+1)+";");
+            checkInfo.setLinks(link + ":" + (LinkInfoServiceImpl.lastLinkId + 1) + ";");
             return linkCheckMapper.insertNewLinkCheckInfo(checkInfo);
         }
         return false;

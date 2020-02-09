@@ -108,8 +108,25 @@ public class LinkSearchServiceImpl implements LinkSearchService {
     }
 
     @Override
+    public String getLinkIdByLink(String link) {
+        long linkId;
+        String all[] = linkCheckService.selectAllLinksByLink(link);
+        if (all != null) {
+            for (String l :
+                    all) {
+                String tmp = l.substring(0, l.lastIndexOf(":"));
+                if (!"".equals(tmp) && tmp.equals(link)) {
+                    linkId = Long.parseLong(l.substring(l.lastIndexOf(":") + 1));
+                    return linkId + "";
+                }
+            }
+        }
+        return "";
+    }
+
+    @Override
     public LinkSearchInfo searchById(String linkId) {
-        return linkSearchRepository.findById(linkId).get();
+        return linkSearchRepository.findById(Long.parseLong(linkId)).get();
     }
 
     /**
@@ -120,7 +137,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
      */
     @Override
     public boolean delete(String id) {
-        linkSearchRepository.deleteById(id);
+        linkSearchRepository.deleteById(Long.parseLong(id));
         return true;
     }
 
