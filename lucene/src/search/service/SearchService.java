@@ -23,10 +23,8 @@ import search.analyzer.MyIKAnalyzer;
 import top.totoro.file.core.TFile;
 import top.totoro.file.util.Disk;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SearchService {
 
@@ -62,7 +60,7 @@ public class SearchService {
      */
     public boolean putCollectionInfo(CollectionInfo info) {
         try {
-            createIndex(info.getTitle(), info.getLabelsJoin(), info.getLink());
+            createIndex(info.getTitle(), Arrays.stream(info.getLabels()).collect(Collectors.joining(",")), info.getLink());
         } catch (Exception e) {
             e.printStackTrace();
         }
