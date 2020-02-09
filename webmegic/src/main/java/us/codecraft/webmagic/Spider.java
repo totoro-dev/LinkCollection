@@ -1,6 +1,5 @@
 package us.codecraft.webmagic;
 
-import org.apache.commons.collections.CollectionUtils;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
@@ -19,20 +18,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <pre>
- *webmagic爬虫的入口类。
+ * webmagic爬虫的入口类。
  *
- *示例：
- *定义一个最简单的爬虫：
+ * 示例：
+ * 定义一个最简单的爬虫：
  *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*")).run();
  *
- *使用FilePipeline保存结果到文件:
+ * 使用FilePipeline保存结果到文件:
  *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))
  *          .pipeline(new FilePipeline("/data/temp/us.codecraft.webmagic/")).run();
  *
- *使用FileCacheQueueScheduler缓存URL，关闭爬虫后下次自动从停止的页面继续抓取:
+ * 使用FileCacheQueueScheduler缓存URL，关闭爬虫后下次自动从停止的页面继续抓取:
  *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))
  *          .scheduler(new FileCacheQueueScheduler("/data/temp/us.codecraft.webmagic/cache/")).run();
  * </pre>
+ *
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午6:53
@@ -67,6 +67,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * 使用已定义的抽取规则新建一个Spider。
+     *
      * @param pageProcessor 已定义的抽取规则
      */
     public Spider(PageProcessor pageProcessor) {
@@ -77,6 +78,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * 使用已定义的抽取规则新建一个Spider。
+     *
      * @param pageProcessor 已定义的抽取规则
      * @return 新建的Spider
      */
@@ -86,6 +88,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * 重新设置startUrls，会覆盖Site本身的startUrls。
+     *
      * @param startUrls
      * @return this
      */
@@ -97,6 +100,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * 为爬虫设置一个唯一ID，用于标志任务，默认情况下使用domain作为uuid，对于单domain多任务的情况，请为重复任务设置不同的ID。
+     *
      * @param uuid 唯一ID
      * @return this
      */
@@ -107,6 +111,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * 设置调度器。调度器用于保存待抓取URL，并可以进行去重、同步、持久化等工作。默认情况下使用内存中的阻塞队列进行调度。
+     *
      * @param scheduler 调度器
      * @return this
      */
@@ -118,6 +123,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * 设置处理管道。处理管道用于最终抽取结果的后处理，例如：保存到文件、保存到数据库等。默认情况下会输出到控制台。
+     *
      * @param pipeline 处理管道
      * @return this
      */
@@ -149,7 +155,7 @@ public class Spider implements Runnable, Task {
             pipelines.add(new ConsolePipeline());
         }
         //singel thread
-        if (executorService==null){
+        if (executorService == null) {
             while (request != null) {
                 processRequest(request);
                 request = scheduler.poll(this);
@@ -212,20 +218,20 @@ public class Spider implements Runnable, Task {
     }
 
     private void addRequest(Page page) {
-        if (CollectionUtils.isNotEmpty(page.getTargetRequests())) {
+        if (!(page.getTargetRequests() == null || page.getTargetRequests().isEmpty())) {
             for (Request request : page.getTargetRequests()) {
                 scheduler.push(request, this);
             }
         }
     }
 
-    private void checkIfNotRunning(){
-        if (!stat.compareAndSet(STAT_INIT,STAT_INIT)){
+    private void checkIfNotRunning() {
+        if (!stat.compareAndSet(STAT_INIT, STAT_INIT)) {
             throw new IllegalStateException("Spider is already running!");
         }
     }
 
-    public void runAsync(){
+    public void runAsync() {
         Thread thread = new Thread(this);
         thread.setDaemon(false);
         thread.start();
@@ -233,6 +239,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * 建立多个线程下载
+     *
      * @param threadNum 线程数
      * @return this
      */
@@ -241,7 +248,7 @@ public class Spider implements Runnable, Task {
         if (threadNum <= 1) {
             throw new IllegalArgumentException("threadNum should be more than one!");
         }
-        synchronized (this){
+        synchronized (this) {
             this.executorService = ThreadUtils.newFixedThreadPool(threadNum);
         }
         return this;

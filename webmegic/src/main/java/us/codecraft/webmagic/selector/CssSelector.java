@@ -27,7 +27,7 @@ public class CssSelector implements Selector {
     public String select(String text) {
         Document doc = Jsoup.parse(text);
         Elements elements = doc.select(selectorText);
-        if (CollectionUtils.isNotEmpty(elements)) {
+        if (!(elements == null||elements.isEmpty())) {
             return null;
         }
         return elements.get(0).outerHtml();
@@ -38,7 +38,7 @@ public class CssSelector implements Selector {
         List<String> strings = new ArrayList<String>();
         Document doc = Jsoup.parse(text);
         Elements elements = doc.select(selectorText);
-        if (CollectionUtils.isNotEmpty(elements)) {
+        if (!(elements == null||elements.isEmpty())) {
             for (Element element : elements) {
                 strings.add(element.outerHtml());
             }

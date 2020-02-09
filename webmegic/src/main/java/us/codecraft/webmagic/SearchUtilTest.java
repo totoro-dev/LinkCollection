@@ -1,7 +1,5 @@
 package us.codecraft.webmagic;
 
-import us.codecraft.webmagic.processor.SimplePageProcessor;
-
 public class SearchUtilTest {
     public static void main(String[] args) {
 //        System.out.println(GenerateInfo.generateLinkCheckInfo("https://baidu.com").toString());
@@ -9,7 +7,7 @@ public class SearchUtilTest {
 //        String collections = userInfo.substring(userInfo.indexOf("\"collections\":\"") + 15, userInfo.indexOf("\",\"likes\":"));
 //        System.out.println(collections);
 
-        Spider.create(new SimplePageProcessor("https://www.jianshu.com/p/3b0b1b30aa0b")).run();
+//        System.out.println(new LinkSpider("https://baidu.com").getTitle());
     }
 
 }

@@ -88,7 +88,7 @@ public class PlainText implements Selectable {
 
     @Override
     public String toString() {
-        if (CollectionUtils.isNotEmpty(all())) {
+        if (!(all() == null || all().isEmpty())) {
             return all().get(0);
         } else {
             return null;
