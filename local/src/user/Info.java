@@ -52,7 +52,7 @@ public class Info {
         String collections = object.getString("collections");
         if (collections != null && collections.length() > 0) {
             TFile.builder().toDisk(Disk.TMP).toPath(Constans.SEARCH_PATH).toFile();
-            if (TFile.getProperty().getFile().isDirectory()) TFile.getProperty().getFile().delete();
+            if (TFile.getProperty().exists()) TFile.getProperty().getFile().delete();
             else TFile.builder().mkdirs();
             TFile.builder().recycle();
             while (collections.length() > 0 && collections.contains(":")) {
@@ -65,7 +65,6 @@ public class Info {
                 String link = LinkController.instance().selectLink(linkId);
                 CollectionInfo collectionInfo = new CollectionInfo(link, linkId, labels.split(","), getTitle(linkId));
                 collectionInfos.add(collectionInfo);
-                System.out.println(collectionInfo);
                 createIndex(collectionInfo);
                 TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toName(Constans.getCollectionFileName(linkId)).toFile();
                 if (!TFile.getProperty().exists()) TFile.builder().create();
@@ -134,6 +133,7 @@ public class Info {
         writer.write("{\"link\":\"" + link + "\",\"labels\":\"" + labels + "\",\"summary\":\"\",\"title\":\"" + title + "\"}");
         TFile.builder().recycle();
         createIndex(collectionInfo);
+        collectionInfos.add(collectionInfo);
         return true;
     }
 
