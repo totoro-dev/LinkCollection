@@ -103,7 +103,7 @@ public class LoveSelectFrame extends JFrame implements ImageButtonListener {
     public void click(String flag) {
         if (flag.equals(submit.path)) {
             String loves = getLoves();
-            UserFrame.refreshLoves(getLovesInChinese(loves));
+            UserFrame.refreshLoves(Info.getLovesInChinese(loves));
             WidgetConstant.setVisibleSize(800,600);
             PushAdapter.refreshInstance(loves);
             MainContentPanel.showPushContent();
@@ -133,50 +133,6 @@ public class LoveSelectFrame extends JFrame implements ImageButtonListener {
             love = changeImg(tour);
         }
         changeLoves(love);
-    }
-
-    /**
-     * 将原本的爱好，翻译成中文，但存储还是英文
-     *
-     * @param origin 英文的爱好
-     * @return 中文的爱好
-     */
-    public static String getLovesInChinese(String origin) {
-        String[] ls = origin.split(",");
-        if (origin == null || origin.length() == 0) return "";
-        String[] loves = new String[ls.length];
-        for (int i = 0; i < ls.length; i++) {
-            String l = ls[i];
-            switch (l) {
-                case "science":
-                    loves[i] = "科技";
-                    break;
-                case "art":
-                    loves[i] = "艺术";
-                case "computer":
-                    loves[i] = "计算机";
-                    break;
-                case "healthy":
-                    loves[i] = "健康";
-                    break;
-                case "economics":
-                    loves[i] = "经济";
-                    break;
-                case "life":
-                    loves[i] = "生活";
-                    break;
-                case "game":
-                    loves[i] = "游戏";
-                    break;
-                case "eat":
-                    loves[i] = "美食";
-                    break;
-                case "tour":
-                    loves[i] = "旅游";
-                    break;
-            }
-        }
-        return Arrays.stream(loves).collect(Collectors.joining(","));
     }
 
     /**

@@ -49,7 +49,7 @@ public class SearchAdapter extends Adapter<SearchAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.setBounds(0, position * 70, WidgetConstant.VisibleWidth - 200, 70);
+        viewHolder.setBounds(0, position * 90, WidgetConstant.VisibleWidth - 200, 90);
         viewHolder.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, WidgetConstant.BorderColor));
         SearchInfo info = data.get(position);
         viewHolder.title.setText("<html><u>" + info.getTitle() + "</u></html>");
@@ -155,9 +155,9 @@ public class SearchAdapter extends Adapter<SearchAdapter.ViewHolder> {
             link.setFont(WidgetConstant.LinkFont);
             labels.setFont(WidgetConstant.LabelFont);
             title.setForeground(WidgetConstant.NormalTitleColor);
-            title.setBounds(10, 0, 400, 30);
-            link.setBounds(10, 30, 400, 20);
-            labels.setBounds(10, 50, 400, 20);
+            title.setBounds(10, 0, 500, 50);
+            link.setBounds(10, 50, 400, 20);
+            labels.setBounds(10, 70, 400, 20);
             add(title);
             add(link);
             add(labels);

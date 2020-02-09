@@ -2,7 +2,6 @@ package linkcollection.client.ui.frame;
 
 import linkcollection.client.ui.bar.DefaultActionBar;
 import linkcollection.client.ui.widgets.ImageButton;
-import linkcollection.client.ui.widgets.ImageButtonListener;
 import linkcollection.client.ui.widgets.Toast;
 import linkcollection.client.ui.widgets.WidgetConstant;
 import user.Register;
@@ -29,13 +28,16 @@ public class CheckMailFrame extends JFrame {
         actionBar.setBounds(0, 0, WidgetConstant.VisibleWidth, 50);
         actionBar.setTitle("邮箱验证");
         add(actionBar);
-        codeTipLabel = new JLabel("验证码 ", JLabel.RIGHT);
+        codeTipLabel = new JLabel("验证码 ", JLabel.LEFT);
         codeField = new JTextField();
-        submit = new ImageButton(getClass(), "ui/img/register.png");
+        submit = new ImageButton(getClass(), "ui/img/checkMail.png");
 
-        codeTipLabel.setBounds(100, 150, 70, 30);
-        codeField.setBounds(170, 150, 130, 30);
-        submit.setBounds(100, 200, 200, 30);
+        codeTipLabel.setFont(WidgetConstant.TitleFont);
+        codeField.setFont(WidgetConstant.TitleFont);
+
+        codeTipLabel.setBounds(100, 120, 60, 30);
+        codeField.setBounds(160, 120, 130, 30);
+        submit.setBounds(100, 180, 200, 30);
 
         add(codeTipLabel);
         add(codeField);
@@ -67,4 +69,5 @@ public class CheckMailFrame extends JFrame {
         WidgetConstant.rollBackVisibleSize();
         parent.setVisible(true);
     }
+
 }

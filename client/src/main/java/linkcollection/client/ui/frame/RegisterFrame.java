@@ -79,7 +79,7 @@ public class RegisterFrame extends JFrame {
         pwdField.setBounds(startX + 70, startY + 80, 130, 30);
         rePwdField.setBounds(startX + 70, startY + 120, 130, 30);
 
-        submit.setBounds(startX + 10, startY + 160, 200, 30);
+        submit.setBounds(startX + 60, startY + 160, 100, 30);
 
         add(nameTipLabel);
         add(mailTipLabel);

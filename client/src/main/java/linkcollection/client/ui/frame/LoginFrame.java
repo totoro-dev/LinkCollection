@@ -17,7 +17,7 @@ public class LoginFrame extends JFrame {
     private JTextField nameField = new JTextField();
     private JTextField pwdField = new JTextField();
     private ImageButton login = new ImageButton(getClass(), "ui/img/login.png");
-    private ImageButton register = new ImageButton(getClass(), "ui/img/toRegister.png");
+    private ImageButton register = new ImageButton(getClass(), "ui/img/register.png");
 
     private JFrame parent;
     private boolean firstRigster = false;

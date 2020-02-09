@@ -15,8 +15,10 @@ import top.totoro.file.core.io.TWriter;
 import top.totoro.file.util.Disk;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class Info {
@@ -131,6 +133,7 @@ public class Info {
         CollectionInfo collectionInfo = new CollectionInfo(link, linkId, labels.split(","), title);
         writer.write("{\"link\":\"" + link + "\",\"labels\":\"" + labels + "\",\"summary\":\"\",\"title\":\"" + title + "\"}");
         TFile.builder().recycle();
+        createIndex(collectionInfo);
         return true;
     }
 
@@ -164,6 +167,50 @@ public class Info {
             }
         }
         return "";
+    }
+
+    /**
+     * 将原本的爱好，翻译成中文，但存储还是英文
+     *
+     * @param origin 英文的爱好
+     * @return 中文的爱好
+     */
+    public static String getLovesInChinese(String origin) {
+        String[] ls = origin.split(",");
+        if (origin == null || origin.length() == 0) return "";
+        String[] loves = new String[ls.length];
+        for (int i = 0; i < ls.length; i++) {
+            String l = ls[i];
+            switch (l) {
+                case "science":
+                    loves[i] = "科技";
+                    break;
+                case "art":
+                    loves[i] = "艺术";
+                case "computer":
+                    loves[i] = "计算机";
+                    break;
+                case "healthy":
+                    loves[i] = "健康";
+                    break;
+                case "economics":
+                    loves[i] = "经济";
+                    break;
+                case "life":
+                    loves[i] = "生活";
+                    break;
+                case "game":
+                    loves[i] = "游戏";
+                    break;
+                case "eat":
+                    loves[i] = "美食";
+                    break;
+                case "tour":
+                    loves[i] = "旅游";
+                    break;
+            }
+        }
+        return Arrays.stream(loves).collect(Collectors.joining(","));
     }
 
     /**
@@ -242,6 +289,12 @@ public class Info {
         writer.write(info);
     }
 
+    /**
+     * 获取系统推荐
+     *
+     * @param types 用户喜好的领域
+     * @return
+     */
     public static LinkedList<SearchInfo> getPushContent(String types) {
         LinkedList<SearchInfo> result = new LinkedList<>();
         String info = PushController.instance().select(types);
@@ -260,6 +313,40 @@ public class Info {
             }
         }
         return result;
+    }
+
+    /**
+     * 获取收藏的链接数量
+     *
+     * @return
+     */
+    public static long getCollectionCount() {
+        TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toFile();
+        File root = TFile.getProperty().getFile();
+        if (root != null) {
+            File[] list = root.listFiles();
+            return list == null ? 0 : list.length;
+        }
+        TFile.builder().recycle();
+        return 0;
+    }
+
+    /**
+     * 获取用户是否是VIP用户
+     *
+     * @return
+     */
+    public static String getVip() {
+        TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.USER_INFO_FILE_NAME).toFile();
+        if (TFile.getProperty().exists()) {
+            TReader reader = new TReader(TFile.getProperty());
+            String info = reader.getStringByFile();
+            TFile.builder().recycle();
+            if (info != null && info.length() > 0) {
+                return JSONObject.parseObject(info).getString("vip").equals("n") ? "否" : "是";
+            }
+        }
+        return "否";
     }
 
     public static void main(String[] args) {
