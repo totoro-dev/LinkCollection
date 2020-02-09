@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
+@SuppressWarnings("ALL")
 public final class WidgetConstant {
 
     public static int VisibleWidth = 500;
@@ -32,7 +33,8 @@ public final class WidgetConstant {
 
     /**
      * 绘制5像素半径的边框
-     * @param g 画笔
+     *
+     * @param g     画笔
      * @param color 背景色
      * @param width 主体宽度
      */
@@ -69,10 +71,11 @@ public final class WidgetConstant {
 
     /**
      * 绘制15像素半径的边框
-     * @param g 画笔
-     * @param bg 背景色
+     *
+     * @param g           画笔
+     * @param bg          背景色
      * @param borderColor 边框色
-     * @param width 主体宽度
+     * @param width       主体宽度
      */
     public static void drawBorderFifteenRadius(Graphics g, Color bg, Color borderColor, int width) {
         Color origin = g.getColor();
@@ -84,36 +87,36 @@ public final class WidgetConstant {
                     g.drawLine(13, 29 - i, width - 14, 29 - i);
                     break;
                 case 1:
-                    drawRowBorder(g, borderColor,1, width, i, 11);
+                    drawRowBorder(g, borderColor, 1, width, i, 11);
                     break;
                 case 2:
-                    drawRowBorder(g, borderColor,1, width, i, 9);
+                    drawRowBorder(g, borderColor, 1, width, i, 9);
                     break;
                 case 3:
-                    drawRowBorder(g, borderColor,1, width, i, 7);
+                    drawRowBorder(g, borderColor, 1, width, i, 7);
                     break;
                 case 4:
-                    drawRowBorder(g, borderColor,0, width, i, 6);
+                    drawRowBorder(g, borderColor, 0, width, i, 6);
                     break;
                 case 5:
-                    drawRowBorder(g, borderColor, 0,width, i, 5);
+                    drawRowBorder(g, borderColor, 0, width, i, 5);
                     break;
                 case 6:
-                    drawRowBorder(g, borderColor, 0,width, i, 4);
+                    drawRowBorder(g, borderColor, 0, width, i, 4);
                     break;
                 case 7:
                 case 8:
-                    drawRowBorder(g, borderColor,0, width, i, 3);
+                    drawRowBorder(g, borderColor, 0, width, i, 3);
                     break;
                 case 9:
                 case 10:
-                    drawRowBorder(g, borderColor,0, width, i, 2);
+                    drawRowBorder(g, borderColor, 0, width, i, 2);
                     break;
                 case 11:
                 case 12:
                 case 13:
                 case 14:
-                    drawRowBorder(g, borderColor, 0,width, i, 1);
+                    drawRowBorder(g, borderColor, 0, width, i, 1);
                     break;
             }
         }
@@ -184,6 +187,15 @@ public final class WidgetConstant {
         Point start = getStartLocation(parent);
         int x = start.x + WidgetConstant.VisibleWidth / 2 - 10 * textLength;
         int y = start.y + WidgetConstant.VisibleHeight - 50;
+        WidgetConstant.ToastLocation = new Point(x, y);
+    }
+
+    public static void reSetToastLocation(int textLength) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+        int x = width/2 - 25 * textLength;
+        int y = height - 100;
         WidgetConstant.ToastLocation = new Point(x, y);
     }
 

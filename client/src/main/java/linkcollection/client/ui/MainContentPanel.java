@@ -37,6 +37,8 @@ public class MainContentPanel extends JPanel {
     public static MainContentPanel instance;
 
     private static String key = "";
+    private static String localKey = key;
+    private static String serviceKey = key;
 
     public MainContentPanel() {
         instance = this;
@@ -140,6 +142,14 @@ public class MainContentPanel extends JPanel {
         JTextField input = new JTextField(hint);
         ImageButton submit = new ImageButton(MainFrame.context.getClass(), "ui/img/search-theme.png");
         container.setBounds((WidgetConstant.VisibleWidth - 200 - width) / 2, 0, width, 30);
+        switch (type) {
+            case 1:
+                input.setText(localKey.equals("") ? hint : localKey);
+                break;
+            case 2:
+                input.setText(serviceKey.equals("") ? hint : serviceKey);
+                break;
+        }
         input.setBackground(Color.white);
         input.setForeground(Color.GRAY);
         input.setFont(WidgetConstant.TitleFont);
@@ -152,8 +162,8 @@ public class MainContentPanel extends JPanel {
                 String temp = input.getText();
                 if (temp.equals(hint)) {
                     input.setText("");
-                    input.setForeground(Color.BLACK);
                 }
+                input.setForeground(Color.BLACK);
             }
 
             @Override
@@ -161,9 +171,9 @@ public class MainContentPanel extends JPanel {
                 //失去焦点时，没有输入内容，显示提示内容
                 String temp = input.getText();
                 if (temp.equals("")) {
-                    input.setForeground(Color.GRAY);
                     input.setText(hint);
                 }
+                input.setForeground(Color.GRAY);
             }
         });
 
@@ -202,10 +212,12 @@ public class MainContentPanel extends JPanel {
         key = input.getText();
         switch (type) {
             case 1:
+                localKey = key;
                 ItemAdapter.refreshInstance(Search.searchInLocal(key));
                 showMyContent();
                 break;
             case 2:
+                serviceKey = key;
                 SearchAdapter.refreshInstance(key);
                 MainContentPanel.showOtherContent();
                 break;

@@ -70,13 +70,6 @@ public class Background {
             String label_2 = null;
             String label_3 = null;
             boolean exist = LinkController.instance().exist(link);
-            try {
-                title = new LinkSpider(link).getTitle();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                System.out.println("finally");
-            }
             if (exist) {
                 String info = LinkController.instance().searchAllByLink(link);
                 if (info != null) {
@@ -85,13 +78,21 @@ public class Background {
                     TFile.builder().recycle();
                     TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toName(Constans.getCollectionFileName(linkId)).toFile();
                     if (!TFile.getProperty().exists()) {
+                        TFile.builder().recycle();
                         label_1 = object.getString("label_1");
                         label_2 = object.getString("label_2");
                         label_3 = object.getString("label_3");
+                    } else {
+                        AppCommon.getMonitorResult().spiderSuccess("链接已收藏", title, label_1, label_2, label_3);
+                        return;
                     }
                 }
             }
-            TFile.builder().recycle();
+            try {
+                title = new LinkSpider(link).getTitle();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             AppCommon.getMonitorResult().spiderSuccess(link, title, label_1, label_2, label_3);
         };
     }

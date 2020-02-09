@@ -2,6 +2,7 @@ package linkcollection.client.ui.frame;
 
 import linkcollection.client.result.MyCheckMailResult;
 import linkcollection.client.result.MyLoginResult;
+import linkcollection.client.result.MyMonitorResult;
 import linkcollection.client.result.MyRegisterResult;
 import linkcollection.client.ui.MainContentPanel;
 import linkcollection.client.ui.MyTray;
@@ -51,6 +52,7 @@ public class MainFrame extends JFrame {
         common.initLoginResult(new MyLoginResult());
         common.initRegisterResult(new MyRegisterResult());
         common.initCheckMailResult(new MyCheckMailResult());
+        common.initMonitorResult(new MyMonitorResult());
 
         if (Login.autoLogin()) {
             setVisible(true);

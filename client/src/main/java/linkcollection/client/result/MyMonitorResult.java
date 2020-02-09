@@ -1,6 +1,7 @@
 package linkcollection.client.result;
 
 import linkcollection.client.ui.frame.CollectionFrame;
+import linkcollection.client.ui.widgets.Toast;
 import linkcollection.common.interfaces.MonitorResult;
 import monitor.Background;
 
@@ -34,16 +35,16 @@ public class MyMonitorResult implements MonitorResult {
     public void spiderSuccess(String link, String title, String label_1, String label_2, String label_3) {
         if (link == null || "".equals(link)) {
             // 全网没有收藏过该链接
+        } else if ("链接已收藏".equals(link)) {
+            Toast.makeText(CollectionFrame.context, link).show(Toast.SHORT);
+        } else {
+            CollectionFrame.setLinkTitle(title);
+            CollectionFrame.setLink(link);
+            CollectionFrame.setLabel_1_Field(label_1 == null ? "" : label_1);
+            CollectionFrame.setLabel_2_Field(label_2 == null ? "" : label_2);
+            CollectionFrame.setLabel_3_Field(label_3 == null ? "" : label_3);
+            CollectionFrame.context.setVisible(true);
         }
-        CollectionFrame.setLinkTitle(title);
-        CollectionFrame.setLink(currContent);
-        CollectionFrame.setLabel_1_Field(label_1 == null ? "" : label_1);
-        CollectionFrame.setLabel_2_Field(label_2 == null ? "" : label_2);
-        CollectionFrame.setLabel_3_Field(label_3 == null ? "" : label_3);
-        CollectionFrame.context.setVisible(true);
-    }
-
-    public MyMonitorResult() {
     }
 
 }

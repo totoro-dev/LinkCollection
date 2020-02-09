@@ -29,10 +29,15 @@ public class Toast extends JWindow {
     }
 
     public static Toast makeText(JFrame parent, String text) {
-        WidgetConstant.reSetToastLocation(parent, text.length());
+        if (parent.getHeight() == 0 || parent.getWidth() == 0){
+            WidgetConstant.reSetToastLocation(text.length());
+        }else {
+            WidgetConstant.reSetToastLocation(parent, text.length());
+        }
         int width = 25 * text.length();
         Toast toast = new Toast();
         toast.parent = parent;
+        toast.setAlwaysOnTop(true);
         toast.setLocation(WidgetConstant.ToastLocation);
         toast.setSize(width, 30);
         JLabel textLabel = new JLabel(text, JLabel.CENTER) {

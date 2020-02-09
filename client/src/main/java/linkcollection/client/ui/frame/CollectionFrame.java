@@ -1,11 +1,16 @@
 package linkcollection.client.ui.frame;
 
+import linkcollection.client.ui.bar.LeftSelectBar;
 import linkcollection.client.ui.widgets.ImageButton;
 import linkcollection.client.ui.widgets.Toast;
 import linkcollection.client.ui.widgets.WidgetConstant;
+import linkcollection.client.ui.widgets.adapter.LabelAdapter;
+import linkcollection.client.ui.widgets.view.RecyclerView;
 import user.Info;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -13,7 +18,7 @@ public class CollectionFrame extends JFrame {
     private JFrame parent;
     public static CollectionFrame context;
 
-    private static JLabel title = new JLabel("百度一下，你就知道");
+    private static JLabel title = new JLabel("<html><u>百度一下，你就知道</u></html");
     private static JLabel link = new JLabel("https://baidu.com");
     private JLabel label_1 = new JLabel("标签1");
     private JLabel label_2 = new JLabel("标签2");
@@ -23,20 +28,22 @@ public class CollectionFrame extends JFrame {
     private static JTextField label_3_Field = new JTextField();
     private ImageButton sure = new ImageButton(getClass(), "ui/img/sure.png"), cancel = new ImageButton(getClass(), "ui/img/cancel.png");
 
-    private int startX = 25, startY = 10;
+    private int startX = 15, startY = 10;
 
     private static boolean putable = false;
 
     public CollectionFrame(JFrame parent) {
+        getContentPane().setBackground(Color.white);
         context = this;
         this.parent = parent;
 //        parent.setVisible(false);
         setUndecorated(true);
-        WidgetConstant.setVisibleSize(400, 200);
+        WidgetConstant.setVisibleSize(500, 200);
         setSize(WidgetConstant.VisibleWidth, WidgetConstant.VisibleHeight);
         setLocation(WidgetConstant.getCenterLocation());
         getContentPane().setLayout(null);
 
+        title.setForeground(WidgetConstant.NormalTitleColor);
         title.setFont(WidgetConstant.TitleFont);
         link.setFont(WidgetConstant.LinkFont);
         label_1.setFont(WidgetConstant.LabelFont);
@@ -46,16 +53,16 @@ public class CollectionFrame extends JFrame {
         label_2_Field.setFont(WidgetConstant.TitleFont);
         label_3_Field.setFont(WidgetConstant.TitleFont);
 
-        title.setBounds(startX, startY, 400 - startX - 10, 30);
-        link.setBounds(startX, startY + 40, 400, 30);
+        title.setBounds(startX, startY, 500 - 2 * startX, 60);
+        link.setBounds(startX, startY + 60, 400, 20);
         label_1.setBounds(startX, startY + 80, 100, 30);
-        label_2.setBounds(startX + 125, startY + 80, 100, 30);
-        label_3.setBounds(startX + 250, startY + 80, 100, 30);
-        label_1_Field.setBounds(startX, startY + 120, 100, 30);
-        label_2_Field.setBounds(startX + 125, startY + 120, 100, 30);
-        label_3_Field.setBounds(startX + 250, startY + 120, 100, 30);
-        sure.setBounds(startX + 50, startY + 160, 100, 30);
-        cancel.setBounds(startX + 200, startY + 160, 100, 30);
+        label_2.setBounds(startX + 160, startY + 80, 100, 30);
+        label_3.setBounds(startX + 320, startY + 80, 100, 30);
+        label_1_Field.setBounds(startX, startY + 110, 150, 30);
+        label_2_Field.setBounds(startX + 160, startY + 110, 150, 30);
+        label_3_Field.setBounds(startX + 320, startY + 110, 150, 30);
+        sure.setBounds(125, startY + 150, 100, 30);
+        cancel.setBounds(275, startY + 150, 100, 30);
 
         add(title);
         add(link);
@@ -78,18 +85,21 @@ public class CollectionFrame extends JFrame {
             if (!"".equals(l3)) list.add(l3);
             String labels = list.stream().collect(Collectors.joining(","));
             if (Info.addCollection(link.getText(), labels, title.getText())) {
+                LabelAdapter.refreshInstance(Info.getCollectionInfos());
+                new RecyclerView(LeftSelectBar.recycleLabelPanel).setAdapter(LabelAdapter.getInstance());
                 Toast.makeText(this, "收藏成功").show(Toast.SHORT);
             } else {
                 Toast.makeText(this, "收藏失败").show(Toast.SHORT);
             }
             setVisible(false);
         });
-
+//        setVisible(true);
         cancel.addClickListener(flag -> setVisible(false));
+        setAlwaysOnTop(true);
     }
 
     public static void setLinkTitle(String title) {
-        CollectionFrame.title.setText(title);
+        CollectionFrame.title.setText("<html><u>" + title + "</u></html");
     }
 
     public static void setLink(String link) {
@@ -113,6 +123,7 @@ public class CollectionFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        new CollectionFrame(MainFrame.context);
+//        new CollectionFrame(MainFrame.context);
+        System.out.println(Arrays.stream(new String[]{"a", "b"}).collect(Collectors.joining(",")));
     }
 }
