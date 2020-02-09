@@ -21,17 +21,6 @@ public class LinkController implements Link {
     }
 
     @Override
-    public String searchAllByLink(String link) {
-        return response(linkRequest.searchAllByLink(link));
-    }
-
-    @Override
-    public boolean exist(String link) {
-        String result = response(linkRequest.exist(link));
-        return Boolean.parseBoolean(result == null ? "false" : result);
-    }
-
-    @Override
     public String put(String userId, String link, String labels) {
         return response(linkRequest.put(userId, link, labels));
     }
@@ -64,8 +53,7 @@ public class LinkController implements Link {
 
     private String response(Call<ResponseBody> call) {
         try {
-            ResponseBody body = call.execute().body();
-            return body == null ? null : body.string();
+            return call.execute().body().string();
         } catch (IOException e) {
             e.printStackTrace();
         }

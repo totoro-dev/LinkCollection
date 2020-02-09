@@ -7,12 +7,6 @@ import retrofit2.http.Query;
 
 public interface LinkRequest {
 
-    @GET("/exist")
-    Call<ResponseBody> exist(@Query("link") String link);
-
-    @GET("/searchAllByLink")
-    Call<ResponseBody> searchAllByLink(@Query("link") String link);
-
     @GET("/put")
     Call<ResponseBody> put(@Query("userId") String userId, @Query("link") String link, @Query("label") String label);
 

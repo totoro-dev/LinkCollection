@@ -47,6 +47,7 @@ public class LinkCheckServiceImpl implements LinkCheckService {
     public boolean existLink(String link) {
         LinkCheckInfo checkInfo = GenerateInfo.generateLinkCheckInfo(link);
         String all = linkCheckMapper.selectAllLinksByLink(checkInfo);
+        System.out.println(all);
         if (all != null && all.contains(link+":")) {
             return true;
         }

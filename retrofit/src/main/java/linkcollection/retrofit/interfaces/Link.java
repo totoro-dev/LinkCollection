@@ -2,10 +2,6 @@ package linkcollection.retrofit.interfaces;
 
 public interface Link {
 
-    boolean exist(String link);
-
-    String searchAllByLink(String link);
-
     String put(String userId, String link, String labels);
 
     String search(String key);
