@@ -8,7 +8,8 @@ import linkcollection.client.ui.frame.LoginFrame;
 import linkcollection.client.ui.frame.MainFrame;
 import linkcollection.client.ui.widgets.Toast;
 import linkcollection.client.ui.widgets.WidgetConstant;
-import linkcollection.client.ui.widgets.adapter.LabelAdapter;
+import linkcollection.client.ui.widgets.adapter.CollectLabelAdapter;
+import linkcollection.client.ui.widgets.adapter.LoveLabelAdapter;
 import linkcollection.client.ui.widgets.adapter.PushAdapter;
 import linkcollection.client.ui.widgets.view.RecyclerView;
 import linkcollection.common.interfaces.LoginResult;
@@ -32,14 +33,14 @@ public class MyLoginResult implements LoginResult {
     @Override
     public void loginSuccess(String s) {
         MainActionBar.setUserName(Info.getUserName());
-        LabelAdapter.refreshInstance(Info.getCollectionInfos());
-        new RecyclerView(LeftSelectBar.recycleLabelPanel).setAdapter(LabelAdapter.getInstance());
-        LeftSelectBar.scrollPane.getViewport().add(LeftSelectBar.recycleLabelPanel);
-        WidgetConstant.setVisibleSize(800, 600);
+        CollectLabelAdapter.refreshInstance(Info.getCollectionInfos());
+        LoveLabelAdapter.refreshInstance(Info.getLoveInfo());
         PushAdapter.refreshInstance(Info.getLoveInfo());
+        new RecyclerView(LeftSelectBar.contentPanel).setAdapter(CollectLabelAdapter.getInstance());
+        WidgetConstant.setVisibleSize(800, 600); // 确保更新显示时大小正确
         MainContentPanel.showPushContent();
-        WidgetConstant.rollBackVisibleSize();
-        new CollectionFrame(MainFrame.context);
-        Background.startClipboardListener();
+        WidgetConstant.rollBackVisibleSize(); // 更新后回退布局大小为当前显示界面大小
+        new CollectionFrame(MainFrame.context); // 只有登录成功时才会初始化收藏界面，但是否显示由MonitorResult决定
+        Background.startClipboardListener(); // 开始监听剪贴板内容变化
     }
 }

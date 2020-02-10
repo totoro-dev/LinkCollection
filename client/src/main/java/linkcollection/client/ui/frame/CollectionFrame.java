@@ -4,7 +4,7 @@ import linkcollection.client.ui.bar.LeftSelectBar;
 import linkcollection.client.ui.widgets.ImageButton;
 import linkcollection.client.ui.widgets.Toast;
 import linkcollection.client.ui.widgets.WidgetConstant;
-import linkcollection.client.ui.widgets.adapter.LabelAdapter;
+import linkcollection.client.ui.widgets.adapter.CollectLabelAdapter;
 import linkcollection.client.ui.widgets.view.RecyclerView;
 import user.Info;
 
@@ -85,8 +85,8 @@ public class CollectionFrame extends JFrame {
             if (!"".equals(l3)) list.add(l3);
             String labels = list.stream().collect(Collectors.joining(","));
             if (Info.addCollection(link.getText(), labels, title.getText())) {
-                LabelAdapter.refreshInstance(Info.getCollectionInfos());
-                new RecyclerView(LeftSelectBar.recycleLabelPanel).setAdapter(LabelAdapter.getInstance());
+                CollectLabelAdapter.refreshInstance(Info.getCollectionInfos());
+                new RecyclerView(LeftSelectBar.contentPanel).setAdapter(CollectLabelAdapter.getInstance());
                 Toast.makeText(this, "收藏成功").show(Toast.SHORT);
             } else {
                 Toast.makeText(this, "收藏失败").show(Toast.SHORT);

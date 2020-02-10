@@ -4,6 +4,9 @@ package linkcollection.client.ui.bar;
 import linkcollection.client.ui.widgets.ImageButton;
 import linkcollection.client.ui.widgets.ImageButtonListener;
 import linkcollection.client.ui.widgets.WidgetConstant;
+import linkcollection.client.ui.widgets.adapter.CollectLabelAdapter;
+import linkcollection.client.ui.widgets.adapter.LoveLabelAdapter;
+import linkcollection.client.ui.widgets.view.RecyclerView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +17,7 @@ import java.awt.*;
 public class LeftSelectBar extends JPanel implements ImageButtonListener {
     private JPanel container = new JPanel(null);
     private JPanel top = new JPanel(null);
-    public static JPanel recycleLabelPanel = new JPanel(null);
+    public static JPanel contentPanel = new JPanel(null);
 
     public static JScrollPane scrollPane = new JScrollPane();
     private ImageButton collection_selected;
@@ -31,9 +34,9 @@ public class LeftSelectBar extends JPanel implements ImageButtonListener {
         scrollPane.setBounds(0, 40, 200, WidgetConstant.VisibleHeight - 90);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(WidgetConstant.NoneBorder);
-        recycleLabelPanel.setPreferredSize(new Dimension(200, 0));
-        recycleLabelPanel.setBackground(Color.white);
-        scrollPane.getViewport().add(recycleLabelPanel);
+        contentPanel.setPreferredSize(new Dimension(200, 0));
+        contentPanel.setBackground(Color.white);
+        scrollPane.getViewport().add(contentPanel);
 
         container.add(top);
         container.add(scrollPane);
@@ -47,11 +50,12 @@ public class LeftSelectBar extends JPanel implements ImageButtonListener {
     public void click(String flag) {
         if (flag.equals(collection_selected.path)) {
             selectedTab("ui/img/collection-20x20-blue.png", "ui/img/favor-20x20.png", "ui/img/select-collection-200x6.png");
-            repaint();
+            new RecyclerView(LeftSelectBar.contentPanel).setAdapter(CollectLabelAdapter.getInstance());
         } else if (flag.equals(favor_selected.path)) {
             selectedTab("ui/img/collection-20x20.png", "ui/img/favor-20x20-blue.png", "ui/img/select-favor-200x6.png");
-            repaint();
+            new RecyclerView(LeftSelectBar.contentPanel).setAdapter(LoveLabelAdapter.getInstance());
         }
+        repaint();
     }
 
     void selectedTab(String path1, String path2, String path3) {

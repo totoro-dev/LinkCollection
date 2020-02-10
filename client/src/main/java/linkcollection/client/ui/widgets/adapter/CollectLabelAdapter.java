@@ -5,7 +5,6 @@ import linkcollection.client.ui.MainContentPanel;
 import linkcollection.client.ui.widgets.ImageButton;
 import linkcollection.client.ui.widgets.WidgetConstant;
 import linkcollection.client.ui.widgets.view.Adapter;
-import user.Info;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -15,29 +14,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class LabelAdapter extends Adapter<LabelAdapter.LabelHolder> {
+public class CollectLabelAdapter extends Adapter<CollectLabelAdapter.LabelHolder> {
 
     public static Map<String, List<CollectionInfo>> itemMap = new LinkedHashMap<>();
     private static LabelHolder selectedLabelHolder = null;
     private List<CollectionInfo> data;
     private List<String> labelList = new LinkedList<>();
 
-    private static LabelAdapter instance;
-    public static LabelAdapter getInstance(){
+    private static CollectLabelAdapter instance;
+    public static CollectLabelAdapter getInstance(){
         return instance;
     }
     public static void refreshInstance(List<CollectionInfo> list) {
-        instance = new LabelAdapter(list);
+        instance = new CollectLabelAdapter(list);
     }
 
-    private LabelAdapter(){
+    private CollectLabelAdapter(){
         if (instance == null){
             data = new LinkedList<>();
-            instance = new LabelAdapter();
+            instance = new CollectLabelAdapter();
         }
     }
 
-    public LabelAdapter(List<CollectionInfo> data) {
+    public CollectLabelAdapter(List<CollectionInfo> data) {
         this.data = data;
         itemMap.clear();
         if (data == null || data.size() == 0) return;
