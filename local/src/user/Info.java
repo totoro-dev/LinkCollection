@@ -321,7 +321,8 @@ public class Info {
      * @return
      */
     public static long getCollectionCount() {
-        TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toFile();
+        TFile.builder().recycle();
+        TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toFile();
         File root = TFile.getProperty().getFile();
         if (root != null) {
             File[] list = root.listFiles();
