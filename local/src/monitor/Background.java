@@ -69,6 +69,7 @@ public class Background {
             String label_1 = null;
             String label_2 = null;
             String label_3 = null;
+            link = link.replace("www.","");
             boolean exist = LinkController.instance().exist(link);
             if (exist) {
                 String info = LinkController.instance().searchAllByLink(link);
