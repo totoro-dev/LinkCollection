@@ -1,17 +1,14 @@
 package linkcollection.client.ui.frame;
 
-import linkcollection.client.result.MyCheckMailResult;
-import linkcollection.client.result.MyLoginResult;
-import linkcollection.client.result.MyMonitorResult;
-import linkcollection.client.result.MyRegisterResult;
+import linkcollection.client.result.*;
 import linkcollection.client.ui.MainContentPanel;
 import linkcollection.client.ui.MyTray;
 import linkcollection.client.ui.bar.LeftSelectBar;
 import linkcollection.client.ui.bar.MainActionBar;
 import linkcollection.client.ui.widgets.Toast;
 import linkcollection.client.ui.widgets.WidgetConstant;
-import linkcollection.common.AppCommon;
 import user.Login;
+import utils.CommonUtil;
 
 import javax.swing.*;
 
@@ -48,11 +45,8 @@ public class MainFrame extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        AppCommon common = new AppCommon();
-        common.initLoginResult(new MyLoginResult());
-        common.initRegisterResult(new MyRegisterResult());
-        common.initCheckMailResult(new MyCheckMailResult());
-        common.initMonitorResult(new MyMonitorResult());
+        CommonUtil.checkAppCommon(new MyUserResult(), new MyPublishResult(), new MyLinkResult(),
+                new MyLoginResult(), new MyRegisterResult(), new MyCheckMailResult(), new MyMonitorResult());
 
         if (Login.autoLogin()) {
             setVisible(true);
@@ -63,7 +57,7 @@ public class MainFrame extends JFrame {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        if (b){
+        if (b) {
             WidgetConstant.setVisibleSize(800, 600);
         }
     }
