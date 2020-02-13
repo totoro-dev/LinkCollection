@@ -10,11 +10,11 @@ public interface LinkRequest {
     @GET("/exist")
     Call<ResponseBody> exist(@Query("link") String link);
 
-    @GET("/searchAllByLink")
-    Call<ResponseBody> searchAllByLink(@Query("link") String link);
-
     @GET("/put")
     Call<ResponseBody> put(@Query("userId") String userId, @Query("link") String link, @Query("label") String label);
+
+    @GET("/delete")
+    Call<ResponseBody> delete(@Query("linkId") String linkId);
 
     @GET("/search")
     Call<ResponseBody> search(@Query("key") String key);
@@ -22,8 +22,8 @@ public interface LinkRequest {
     @GET("/searchById")
     Call<ResponseBody> searchById(@Query("linkId") String linkId);
 
-    @GET("/delete")
-    Call<ResponseBody> delete(@Query("linkId") String linkId);
+    @GET("/searchAllByLink")
+    Call<ResponseBody> selectAllByLink(@Query("link") String link);
 
     @GET("/selectLink")
     Call<ResponseBody> selectLink(@Query("linkId") String linkId);

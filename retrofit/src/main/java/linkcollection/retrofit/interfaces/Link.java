@@ -4,15 +4,15 @@ public interface Link {
 
     boolean exist(String link);
 
-    String searchAllByLink(String link);
-
     String put(String userId, String link, String labels);
+
+    String delete(String linkId);
 
     String search(String key);
 
     String searchById(String linkId);
 
-    String delete(String linkId);
+    String selectAllByLink(String link);
 
     String selectLink(String linkId);
 

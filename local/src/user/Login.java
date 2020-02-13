@@ -14,6 +14,11 @@ import utils.UserInfoTool;
 public class Login {
     private static TFile fileTool = TFile.builder().toDisk(Disk.TMP);
     private static String userId;
+    private static String name;
+
+    public static String getName() {
+        return name;
+    }
 
     public static boolean autoLogin() {
         TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.LOGIN_INFO_FILE_NAME).toFile();
@@ -52,6 +57,7 @@ public class Login {
      * @return
      */
     public static boolean firstLogin(String name, String pwd) {
+        Login.name = name;
         userId = UserController.instance().login(name, pwd);
         if (userId == null) AppCommon.getLoginResult().loginError("网络错误");
         switch (userId) {

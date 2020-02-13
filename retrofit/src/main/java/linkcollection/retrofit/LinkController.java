@@ -1,11 +1,8 @@
 package linkcollection.retrofit;
 
+import linkcollection.common.AppCommon;
 import linkcollection.retrofit.interfaces.Link;
 import linkcollection.retrofit.interfaces.LinkRequest;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-
-import java.io.IOException;
 
 public class LinkController implements Link {
 
@@ -21,54 +18,100 @@ public class LinkController implements Link {
     }
 
     @Override
-    public String searchAllByLink(String link) {
-        return response(linkRequest.searchAllByLink(link));
+    public String selectAllByLink(String link) {
+        String result = "";
+        try {
+            result = ResponseUtil.response(linkRequest.selectAllByLink(link)).get();
+            AppCommon.getLinkServiceResult().selectAllByLink(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public boolean exist(String link) {
-        String result = response(linkRequest.exist(link));
+        String result = "";
+        try {
+            result = ResponseUtil.response(linkRequest.exist(link)).get();
+            AppCommon.getLinkServiceResult().existLink(Boolean.parseBoolean(result == null ? "false" : result));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return Boolean.parseBoolean(result == null ? "false" : result);
     }
 
     @Override
     public String put(String userId, String link, String labels) {
-        return response(linkRequest.put(userId, link, labels));
+        String result = "";
+        try {
+            result = ResponseUtil.response(linkRequest.put(userId, link, labels)).get();
+            AppCommon.getLinkServiceResult().putLink(Boolean.parseBoolean(result == null ? "false" : result));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public String search(String key) {
-        return response(linkRequest.search(key));
+        String result = "";
+        try {
+            result = ResponseUtil.response(linkRequest.search(key)).get();
+            AppCommon.getLinkServiceResult().searchAllByKey(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public String searchById(String linkId) {
-        return response(linkRequest.searchById(linkId));
+        String result = "";
+        try {
+            result = ResponseUtil.response(linkRequest.searchById(linkId)).get();
+            AppCommon.getLinkServiceResult().searchLinkInfoById(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public String delete(String linkId) {
-        return response(linkRequest.delete(linkId));
+        String result = "";
+        try {
+            result = ResponseUtil.response(linkRequest.delete(linkId)).get();
+            AppCommon.getLinkServiceResult().deleteLinkById(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public String selectLink(String linkId) {
-        return response(linkRequest.selectLink(linkId));
+        String result = "";
+        try {
+            result = ResponseUtil.response(linkRequest.selectLink(linkId)).get();
+            AppCommon.getLinkServiceResult().selectLinkById(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public String selectAll(String linkId) {
-        return response(linkRequest.selectAll(linkId));
-    }
-
-
-    private String response(Call<ResponseBody> call) {
+        String result = "";
         try {
-            ResponseBody body = call.execute().body();
-            return body == null ? null : body.string();
-        } catch (IOException e) {
+            result = ResponseUtil.response(linkRequest.selectAll(linkId)).get();
+            AppCommon.getLinkServiceResult().selectAllById(result);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
     }
+
+
 }

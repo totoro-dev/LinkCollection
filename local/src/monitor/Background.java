@@ -70,7 +70,7 @@ public class Background {
             link = link.replace("www.", "");
             boolean exist = LinkController.instance().exist(link);
             if (exist) {
-                String info = LinkController.instance().searchAllByLink(link);
+                String info = LinkController.instance().selectAllByLink(link);
                 if (info != null) {
                     JSONObject object = JSONObject.parseObject(info);
                     linkId = object.getString("linkId");

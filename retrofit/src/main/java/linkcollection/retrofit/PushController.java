@@ -1,19 +1,16 @@
 package linkcollection.retrofit;
 
+import linkcollection.common.AppCommon;
 import linkcollection.retrofit.interfaces.Push;
 import linkcollection.retrofit.interfaces.PushRequest;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-
-import java.io.IOException;
 
 public class PushController implements Push {
     private PushRequest pushRequest = RetrofitRequest.getPushRequest();
 
-    private static PushController userController = new PushController();
+    private static PushController pushController = new PushController();
 
     public static PushController instance() {
-        return userController;
+        return pushController;
     }
 
     private PushController() {
@@ -21,21 +18,26 @@ public class PushController implements Push {
 
     @Override
     public String select(String type) {
-        return response(pushRequest.selectByType(type));
+        String result = "";
+        try {
+            result = ResponseUtil.response(pushRequest.selectByType(type)).get();
+            AppCommon.getPublishResult().selectAllByTypes(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
     public String insert(String type, String linkId) {
-        return response(pushRequest.insert(type, linkId));
-    }
-
-
-    private String response(Call<ResponseBody> call) {
+        String result = "";
         try {
-            return call.execute().body().string();
-        } catch (IOException e) {
+            result = ResponseUtil.response(pushRequest.insert(type, linkId)).get();
+            AppCommon.getPublishResult().insertLinkToType(result);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
     }
+
 }
