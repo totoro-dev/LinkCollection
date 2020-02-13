@@ -7,9 +7,8 @@ import linkcollection.retrofit.LinkController;
 import spider.LinkSpider;
 import top.totoro.file.core.TFile;
 import top.totoro.file.util.Disk;
+import utils.ScheduledService;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +17,6 @@ public class Background {
     private static String oldContent = ",";
     private static String currContent = "";
 
-    private static final ScheduledExecutorService SERVICE = Executors.newScheduledThreadPool(5);
     private static Runnable clipboardListenerTask;
 
     private static Runnable currTask;
@@ -27,22 +25,22 @@ public class Background {
     public static void startClipboardListener() {
         if (clipboardListenerTask == null) {
             clipboardListenerTask = () -> {
-                // TODO：排除空格的影响
-                if (currContent != AppCommon.getMonitorResult().getClipboardContent()) {
-                    currContent = AppCommon.getMonitorResult().getClipboardContent();
-                    if (currContent != null && !"".equals(currContent) && !oldContent.contains("," + currContent + ",")) {
+                String content = AppCommon.getMonitorResult().getClipboardContent().trim();
+                if (currContent != content) {
+                    currContent = content;
+                    if (!"".equals(currContent) && !oldContent.contains("," + currContent + ",")) {
                         oldContent += currContent + ",";
                         AppCommon.getMonitorResult().clipboardContentChanged();
                     }
                 }
             };
-            SERVICE.scheduleWithFixedDelay(clipboardListenerTask, 0, 500, TimeUnit.MILLISECONDS);
+            ScheduledService.LOCAL_SERVICE.scheduleWithFixedDelay(clipboardListenerTask, 0, 500, TimeUnit.MILLISECONDS);
         }
     }
 
     public static void startService() {
         currTask = createTask();
-        currFuture = SERVICE.schedule(currTask, 0, TimeUnit.MILLISECONDS);
+        currFuture = ScheduledService.LOCAL_SERVICE.schedule(currTask, 0, TimeUnit.MILLISECONDS);
     }
 
     public static void stopService() {
@@ -52,7 +50,7 @@ public class Background {
 
     private static void restart() {
         if (currTask != null && currFuture.isCancelled()) {
-            currFuture = SERVICE.schedule(currTask, 1, TimeUnit.MILLISECONDS);
+            currFuture = ScheduledService.LOCAL_SERVICE.schedule(currTask, 1, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -69,7 +67,7 @@ public class Background {
             String label_1 = null;
             String label_2 = null;
             String label_3 = null;
-            link = link.replace("www.","");
+            link = link.replace("www.", "");
             boolean exist = LinkController.instance().exist(link);
             if (exist) {
                 String info = LinkController.instance().searchAllByLink(link);
