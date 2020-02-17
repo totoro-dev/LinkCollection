@@ -14,9 +14,9 @@ public class RetrofitRequest {
     private static LinkRequest LINK_REQUEST;
     private static PushRequest PUSH_REQUEST;
 
-    private static final String USER_BASE_URL = "http://localhost:18888";
-    private static final String LINK_BASE_URL = "http://localhost:18887";
-    private static final String PUSH_BASE_URL = "http://localhost:18886";
+    private static final String USER_BASE_URL = "http://192.168.1.24:18888";
+    private static final String LINK_BASE_URL = "http://192.168.1.24:18887";
+    private static final String PUSH_BASE_URL = "http://192.168.1.24:18886";
 
     public static synchronized UserRequest getUserRequest() {
         if (USER_RETROFIT == null) {

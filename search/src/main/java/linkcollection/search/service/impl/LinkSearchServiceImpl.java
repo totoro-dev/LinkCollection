@@ -204,8 +204,8 @@ public class LinkSearchServiceImpl implements LinkSearchService {
                     linkInfoService.insertNewLinkInfo(info);
                     // 创建索引
                     linkSearchRepository.save(searchInfo);
-                    // 更新用户信息
-                    updateUserCollection(searchInfo);
+                    // 存储热点标签信息
+                    new LinkLabelsStorage(searchInfo, linkInfoService);
                     saveQueue.remove(i);
                     i = 0;
                     size = saveQueue.size();
@@ -233,7 +233,8 @@ public class LinkSearchServiceImpl implements LinkSearchService {
                 for (int i = 0; i < size; i++) {
                     index = i;
                     LinkSearchInfo searchInfo = updateQueue.get(i);
-                    updateUserCollection(searchInfo);
+                    // 存储热点标签信息
+                    new LinkLabelsStorage(searchInfo, linkInfoService);
                     updateQueue.remove(i);
                     i = 0;
                     size = updateQueue.size();

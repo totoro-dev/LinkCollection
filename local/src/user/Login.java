@@ -34,9 +34,19 @@ public class Login {
                 String name = object.getString("name");
                 String[] check = UserInfoTool.get(name);
                 if (check[0].equals(headId) && check[1].equals(tailId)) {
-                    Info.getCollectionInfo();
-                    AppCommon.getLoginResult().loginSuccess(Login.getUserId());
-                    return true;
+//                    Info.getCollectionInfo();
+                    TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.USER_INFO_FILE_NAME).toFile();
+                    if (TFile.getProperty().exists()) {
+                        reader = new TReader(TFile.getProperty());
+                        String info = reader.getStringByFile();
+                        if (info != null) {
+                            JSONObject object1 = JSONObject.parseObject(info);
+                            userId = object1.getString("userId");
+                            Info.refreshCollectionInfo(userId);
+                            AppCommon.getLoginResult().loginSuccess(userId);
+                            return true;
+                        }
+                    }
                 }
             } else {
                 System.out.println("请重新登录");

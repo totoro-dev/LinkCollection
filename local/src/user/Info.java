@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import entry.CollectionInfo;
 import entry.SearchInfo;
+import linkcollection.common.AppCommon;
 import linkcollection.common.constans.Constans;
 import linkcollection.retrofit.LinkController;
 import linkcollection.retrofit.PushController;
 import linkcollection.retrofit.UserController;
-import search.service.SearchService;
 import top.totoro.file.core.TFile;
 import top.totoro.file.core.io.TReader;
 import top.totoro.file.core.io.TWriter;
@@ -25,7 +25,6 @@ public class Info {
 
     private static final String DEFAULT_INFO = "";
 
-    private static final SearchService ss = new SearchService();
 
     private static final List<CollectionInfo> collectionInfos = new LinkedList<>();
 
@@ -52,8 +51,12 @@ public class Info {
         String collections = object.getString("collections");
         if (collections != null && collections.length() > 0) {
             TFile.builder().toDisk(Disk.TMP).toPath(Constans.SEARCH_PATH).toFile();
-            if (TFile.getProperty().exists()) TFile.getProperty().getFile().delete();
-            else TFile.builder().mkdirs();
+            if (TFile.getProperty().exists()) {
+                TFile.getProperty().getFile().delete();
+                TFile.builder().mkdirs();
+            } else {
+                TFile.builder().mkdirs();
+            }
             TFile.builder().recycle();
             while (collections.length() > 0 && collections.contains(":")) {
                 // 从后面往前找
@@ -121,19 +124,41 @@ public class Info {
      * @return
      */
     public static boolean addCollection(String link, String labels, String title) {
+        title.replace("<html><u>", "");
+        title.replace("</html></u>", "");
         // 提交链接，获取链接ID
         String linkId = LinkController.instance().put(Login.getUserId(), link, labels);
         if (linkId == null || "".equals(linkId)) return false;
+        // 每次添加收藏，都要先同步远程记录，防止冲突
+        if (!refreshCollectionInfo(Login.getUserId())) return false;
+        TFile.builder().recycle();
         TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toFile();
         if (!TFile.getProperty().exists()) TFile.builder().mkdirs();
         TFile.builder().toName(Constans.getCollectionFileName(linkId)).toFile();
-        if (!TFile.getProperty().exists()) TFile.builder().create();
-        TWriter writer = new TWriter(TFile.getProperty());
-        CollectionInfo collectionInfo = new CollectionInfo(link, linkId, labels.split(","), title);
-        writer.write("{\"link\":\"" + link + "\",\"labels\":\"" + labels + "\",\"summary\":\"\",\"title\":\"" + title + "\"}");
-        TFile.builder().recycle();
-        createIndex(collectionInfo);
-        collectionInfos.add(collectionInfo);
+        if (!TFile.getProperty().exists()) {
+            TFile.builder().recycle();
+            TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.USER_INFO_FILE_NAME).toFile();
+            TReader reader = new TReader(TFile.getProperty());
+            String info = reader.getStringByFile();
+            JSONObject object = JSONObject.parseObject(info);
+            String collections = object.getString("collections");
+            String collectionCurr = collections + "," + linkId + ":" + labels;
+            String result = UserController.instance().updateCollections(Login.getUserId(), collectionCurr);
+            if (result != null && !"null".equals(result) && Boolean.parseBoolean(result)) {
+                info = info.substring(0, info.lastIndexOf("collections\":\"") + "collections\":\"".length()) + collectionCurr + info.substring(info.lastIndexOf("\",\"likes\":"));
+                TWriter writer = new TWriter(TFile.getProperty());
+                writer.write(info);
+                TFile.builder().recycle();
+                TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toName(Constans.getCollectionFileName(linkId)).toFile();
+                TFile.builder().create();
+                writer = new TWriter(TFile.getProperty());
+                CollectionInfo collectionInfo = new CollectionInfo(link, linkId, labels.split(","), title);
+                writer.write("{\"link\":\"" + link + "\",\"labels\":\"" + labels + "\",\"summary\":\"\",\"title\":\"" + title + "\"}");
+                TFile.builder().recycle();
+                createIndex(collectionInfo);
+                collectionInfos.add(collectionInfo);
+            }
+        }
         return true;
     }
 
@@ -141,7 +166,7 @@ public class Info {
      * 本地创建索引
      */
     public static void createIndex(CollectionInfo collectionInfo) {
-        ss.putCollectionInfo(collectionInfo);
+        AppCommon.getLocalSearch().createIndex(collectionInfo);
     }
 
     private static String getTitle(String linkId) {
@@ -351,6 +376,12 @@ public class Info {
     }
 
     public static void main(String[] args) {
-        System.out.println(getPushContent("science,computer"));
+//        System.out.println(getPushContent("science,computer"));
+//        String info = "{\"userId\":1,\"vip\":\"n\",\"collections\":\",1:龙猫\",\"likes\":\"\",\"loves\":\"\",\"last\":1581769765796}";
+//        String coll = ",1:龙猫" + ",1:龙猫";
+//        String pre = info.substring(0, info.lastIndexOf("collections\":\"") + "collections\":\"".length()) + coll + info.substring(info.lastIndexOf("\",\"likes\":"));
+//        System.out.println(pre);
+//        Login.setUserId(1);
+//        addCollection("https://baidu.com","百度","搜索引擎");
     }
 }
