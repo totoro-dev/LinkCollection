@@ -82,7 +82,7 @@ public class Background {
                         label_2 = object.getString("label_2");
                         label_3 = object.getString("label_3");
                     } else {
-                        AppCommon.getMonitorResult().spiderSuccess("链接已收藏", title, label_1, label_2, label_3);
+                        AppCommon.getMonitorResult().spiderSuccess(link, "链接已收藏", label_1, label_2, label_3);
                         return;
                     }
                 }

@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.schedular;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
@@ -22,8 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 下午1:13
  */
 public class FileCacheQueueScheduler implements Scheduler {
-
-    private Logger logger = Logger.getLogger(getClass());
 
     private String filePath = System.getProperty("java.io.tmpdir");
 
@@ -64,7 +61,6 @@ public class FileCacheQueueScheduler implements Scheduler {
         initWriter();
         initFlushThread();
         inited.set(true);
-        logger.info("init cache scheduler success");
     }
 
     private void initFlushThread() {
@@ -92,7 +88,6 @@ public class FileCacheQueueScheduler implements Scheduler {
             readCursorFile();
             readUrlFile();
         } catch (IOException e) {
-            logger.error("init file error",e);
         }
     }
 
@@ -126,9 +121,6 @@ public class FileCacheQueueScheduler implements Scheduler {
     public synchronized void push(Request request, Task task) {
         if (!inited.get()) {
             init(task);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("push to queue " + request.getUrl());
         }
         if (urls.add(request.getUrl())) {
             queue.add(request);

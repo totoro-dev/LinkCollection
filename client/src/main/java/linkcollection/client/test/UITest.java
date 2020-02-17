@@ -5,6 +5,7 @@ import linkcollection.client.ui.bar.LeftSelectBar;
 import linkcollection.client.ui.bar.MainActionBar;
 import linkcollection.client.ui.MainContentPanel;
 import linkcollection.client.ui.widgets.WidgetConstant;
+import spider.LinkSpider;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +47,8 @@ public class UITest extends JFrame {
     }
 
     public static void main(String[] args) {
-        new UITest();
+//        new UITest();
+        System.out.println(new LinkSpider("http://totoro-dev.top").getTitle());
     }
 
     @Override

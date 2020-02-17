@@ -35,7 +35,7 @@ public class MyMonitorResult implements MonitorResult {
     public void spiderSuccess(String link, String title, String label_1, String label_2, String label_3) {
         if (link == null || "".equals(link)) {
             // 全网没有收藏过该链接
-        } else if ("链接已收藏".equals(link)) {
+        } else if ("链接已收藏".equals(title)) {
             Toast.makeText(CollectionFrame.context, link).show(Toast.SHORT);
         } else {
             CollectionFrame.setLinkTitle(title);

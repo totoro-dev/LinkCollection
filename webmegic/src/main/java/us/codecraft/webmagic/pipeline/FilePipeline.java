@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.pipeline;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.log4j.Logger;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 
@@ -9,10 +8,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 /**
  * 持久化到文件的接口。
+ *
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午6:28
@@ -20,8 +19,6 @@ import java.util.Map;
 public class FilePipeline implements Pipeline {
 
     private String path = "sdcard/web/data/temp/us.codecraft.webmagic/";
-
-    private Logger logger = Logger.getLogger(getClass());
 
     /**
      * 新建一个FilePipeline，使用默认保存路径"/data/temp/us.codecraft.webmagic/"
@@ -32,6 +29,7 @@ public class FilePipeline implements Pipeline {
 
     /**
      * 新建一个FilePipeline
+     *
      * @param path 文件保存路径
      */
     public FilePipeline(String path) {
@@ -53,7 +51,6 @@ public class FilePipeline implements Pipeline {
 //            }
             printWriter.close();
         } catch (IOException e) {
-            logger.warn("write file error",e);
         }
     }
 }

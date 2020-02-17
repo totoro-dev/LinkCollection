@@ -2,7 +2,6 @@ package us.codecraft.webmagic.downloader;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
@@ -13,17 +12,16 @@ import java.io.*;
 
 /**
  * 使用缓存到本地的文件来模拟下载，可以在Spider框架中仅进行抽取工作。<br>
+ *
  * @author code4crafer@gmail.com
- *         Date: 13-6-24
- *         Time: 上午7:24
+ * Date: 13-6-24
+ * Time: 上午7:24
  */
 public class FileDownloader implements Downloader {
 
     private String path = "/data/temp/us.codecraft.webmagic/";
 
     private Downloader downloaderWhenFileMiss;
-
-    private Logger logger = Logger.getLogger(getClass());
 
     public FileDownloader() {
         this("/data/temp/us.codecraft.webmagic/", null);
@@ -56,9 +54,7 @@ public class FileDownloader implements Downloader {
             }
         } catch (IOException e) {
             if (e instanceof FileNotFoundException) {
-                logger.info("File not exist for url " + request.getUrl());
             } else {
-                logger.warn("File read error for url " + request.getUrl(), e);
             }
         }
         if (page == null) {
@@ -69,11 +65,11 @@ public class FileDownloader implements Downloader {
 
     private String getHtml(BufferedReader bufferedReader) throws IOException {
         String line;
-        StringBuilder htmlBuilder= new StringBuilder();
+        StringBuilder htmlBuilder = new StringBuilder();
         line = bufferedReader.readLine();
         line = StringUtils.removeStart(line, "html:\t");
         htmlBuilder.append(line);
-        while ((line=bufferedReader.readLine())!=null){
+        while ((line = bufferedReader.readLine()) != null) {
             htmlBuilder.append(line);
         }
         return htmlBuilder.toString();

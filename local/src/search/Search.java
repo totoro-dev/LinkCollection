@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import entry.CollectionInfo;
 import entry.SearchInfo;
+import linkcollection.common.AppCommon;
 import linkcollection.retrofit.LinkController;
-import search.service.SearchService;
 
 import java.util.LinkedList;
 
@@ -31,8 +31,7 @@ public class Search {
     public static LinkedList<CollectionInfo> searchInLocal(String key) {
         LinkedList<CollectionInfo> list = new LinkedList<>();
         if (key == null || key.equals("")) return list;
-        SearchService service = new SearchService();
-        CollectionInfo[] infos = service.searchCollectionInfo(key);
+        CollectionInfo[] infos = AppCommon.getLocalSearch().searchInLocal(key);
         if (infos != null && infos.length > 0) {
             for (CollectionInfo info :
                     infos) {

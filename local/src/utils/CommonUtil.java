@@ -6,7 +6,7 @@ import linkcollection.common.interfaces.*;
 public class CommonUtil {
     private static AppCommon app = new AppCommon();
 
-    public static void checkAppCommon(UserResult userResult, PublishResult publishResult, LinkServiceResult linkServiceResult, LoginResult loginResult, RegisterResult registerResult, CheckMailResult checkMailResult, MonitorResult monitorResult) {
+    public static void checkAppCommon(UserResult userResult, PublishResult publishResult, LinkServiceResult linkServiceResult, LoginResult loginResult, RegisterResult registerResult, CheckMailResult checkMailResult, MonitorResult monitorResult, LocalSearch localSearch) {
         if (AppCommon.getUserResult() == null) {
             app.initUserResult(userResult);
         }
@@ -27,6 +27,9 @@ public class CommonUtil {
         }
         if (AppCommon.getMonitorResult() == null) {
             app.initMonitorResult(monitorResult);
+        }
+        if (AppCommon.getLocalSearch() == null) {
+            app.initLocalSearch(localSearch);
         }
     }
 }

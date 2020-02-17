@@ -48,7 +48,7 @@ public class SimplePageProcessor implements PageProcessor {
 //        page.putField("html", page.getHtml().toString());
 //        page.putField("content", page.getHtml().smartContent());
         System.out.println(page.getHtml().xpath("//title"));
-        System.out.println(page.getHtml().smartContent());
+//        System.out.println(page.getHtml().smartContent());
 //        page.putField("sc", page.getHtml().smartContent());
 //        System.out.println(page.getResultItems().get("sc").toString());
 //        List<String> all = page.getHtml().all();

@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.selector;
 
-import org.apache.log4j.Logger;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 
@@ -15,8 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 下午4:42
  */
 public class SmartContentSelector implements Selector {
-
-    private Logger logger = Logger.getLogger(getClass());
 
     public SmartContentSelector() {
     }
@@ -57,10 +54,6 @@ public class SmartContentSelector implements Selector {
             }
         });
         TagNode contentNode = sortList.get(0).getKey();
-        if (logger.isDebugEnabled()) {
-            logger.debug("p\t" + contentNode.getName() + "#" + contentNode.getAttributeByName("id") +
-                    "@" + contentNode.getAttributeByName("class"));
-        }
         return htmlCleaner.getInnerHtml(contentNode);
     }
 

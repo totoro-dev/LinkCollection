@@ -45,8 +45,8 @@ public class MainFrame extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        CommonUtil.checkAppCommon(new MyUserResult(), new MyPublishResult(), new MyLinkResult(),
-                new MyLoginResult(), new MyRegisterResult(), new MyCheckMailResult(), new MyMonitorResult());
+        CommonUtil.checkAppCommon(new MyUserResult(), new MyPublishResult(), new MyLinkResult(), new MyLoginResult(),
+                new MyRegisterResult(), new MyCheckMailResult(), new MyMonitorResult(), new MyLocalSearch());
 
         if (Login.autoLogin()) {
             setVisible(true);

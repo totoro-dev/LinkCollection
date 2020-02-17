@@ -8,10 +8,12 @@ public class AppCommon {
     private static CheckMailResult checkMailResult;
 
     private static MonitorResult monitorResult;
+    private static LocalSearch localSearch;
 
     private static LinkServiceResult linkServiceResult;
     private static PublishResult publishResult;
     private static UserResult userResult;
+
 
     public void initLoginResult(LoginResult loginResult){
         this.loginResult = loginResult;
@@ -22,8 +24,12 @@ public class AppCommon {
     public void initCheckMailResult(CheckMailResult checkMailResult){
         this.checkMailResult = checkMailResult;
     }
+
     public void initMonitorResult(MonitorResult monitorResult){
         this.monitorResult = monitorResult;
+    }
+    public void initLocalSearch(LocalSearch localSearch){
+        this.localSearch = localSearch;
     }
 
     public void initLinkServiceResult(LinkServiceResult linkServiceResult){
@@ -50,6 +56,10 @@ public class AppCommon {
 
     public static MonitorResult getMonitorResult() {
         return monitorResult;
+    }
+
+    public static LocalSearch getLocalSearch() {
+        return localSearch;
     }
 
     public static LinkServiceResult getLinkServiceResult() {
