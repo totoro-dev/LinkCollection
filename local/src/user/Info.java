@@ -27,9 +27,14 @@ public class Info {
 
 
     private static final List<CollectionInfo> collectionInfos = new LinkedList<>();
+    private static final List<Long> collectLinkIds = new LinkedList<>();
 
     public static List<CollectionInfo> getCollectionInfos() {
         return collectionInfos;
+    }
+
+    public static boolean checkHasCollected(long linkId) {
+        return collectLinkIds.size() != 0 && collectLinkIds.contains(linkId);
     }
 
     /**
@@ -40,6 +45,7 @@ public class Info {
      */
     public static boolean refreshCollectionInfo(String userId) {
         collectionInfos.clear();
+        collectLinkIds.clear();
         String info = UserController.instance().userInfo(userId);
         if (info == null || "".equals(info)) return false;
         TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.USER_INFO_FILE_NAME).toFile();
@@ -67,6 +73,7 @@ public class Info {
                 collections = collections.substring(0, collections.lastIndexOf(","));
                 String link = LinkController.instance().selectLink(linkId);
                 CollectionInfo collectionInfo = new CollectionInfo(link, linkId, labels.split(","), getTitle(linkId));
+                collectLinkIds.add(Long.parseLong(linkId));
                 collectionInfos.add(collectionInfo);
                 createIndex(collectionInfo);
                 TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toName(Constans.getCollectionFileName(linkId)).toFile();
@@ -100,7 +107,7 @@ public class Info {
         if (files == null) return false;
         for (File file :
                 files) {
-            String linkId = file.getName();
+            String linkId = file.getName().substring(0, file.getName().indexOf("."));
             TFile.getProperty().setFile(file);
             reader = new TReader(TFile.getProperty());
             String collectionInfoContent = reader.getStringByFile();
@@ -111,6 +118,7 @@ public class Info {
             String summary = object.getString("summary");
             CollectionInfo collectionInfo = new CollectionInfo(link, linkId, labels, title);
             collectionInfos.add(collectionInfo);
+            collectLinkIds.add(Long.parseLong(linkId));
         }
         return true;
     }
@@ -124,8 +132,8 @@ public class Info {
      * @return
      */
     public static boolean addCollection(String link, String labels, String title) {
-        title.replace("<html><u>", "");
-        title.replace("</html></u>", "");
+        title = title.replace("<html><u>", "");
+        title = title.replace("</html></u>", "");
         // 提交链接，获取链接ID
         String linkId = LinkController.instance().put(Login.getUserId(), link, labels);
         if (linkId == null || "".equals(linkId)) return false;
@@ -157,9 +165,55 @@ public class Info {
                 TFile.builder().recycle();
                 createIndex(collectionInfo);
                 collectionInfos.add(collectionInfo);
+                collectLinkIds.add(Long.parseLong(linkId));
             }
         }
         return true;
+    }
+
+    public static boolean deleteCollection(String linkId) {
+        if (linkId == null || "".equals(linkId)) return false;
+        // 每次删除收藏，都要先同步远程记录，防止冲突
+        if (!refreshCollectionInfo(Login.getUserId())) return false;
+        TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toName(Constans.getCollectionFileName(linkId)).toFile();
+        if (TFile.getProperty().exists()) {
+            // 开始修改用户info数据
+            TFile.builder().recycle();
+            TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.USER_INFO_FILE_NAME).toFile();
+            TReader reader = new TReader(TFile.getProperty());
+            String info = reader.getStringByFile();
+            JSONObject object = JSONObject.parseObject(info);
+            String collections = object.getString("collections");
+            String linkFlag = "," + linkId + ":";
+            if (collections.contains(linkFlag)) {
+                String labels = collections.substring(collections.indexOf(linkFlag) + linkFlag.length());
+                if (labels.contains(":")) {
+                    labels = labels.substring(0, labels.indexOf(":"));
+                    labels = labels.substring(0, labels.lastIndexOf(","));
+                }
+                String deleteFlag = linkFlag + labels;
+                collections = collections.replace(deleteFlag, "");
+            }
+            TFile.builder().recycle();
+            String result = UserController.instance().updateCollections(Login.getUserId(), collections);
+            if (result != null && !"null".equals(result) && Boolean.parseBoolean(result)) {
+                info = info.substring(0, info.lastIndexOf("collections\":\"") + "collections\":\"".length()) + collections + info.substring(info.lastIndexOf("\",\"likes\":"));
+                TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.USER_INFO_FILE_NAME).toFile();
+                TWriter writer = new TWriter(TFile.getProperty());
+                writer.write(info);
+                TFile.builder().recycle();
+                AppCommon.getLocalSearch().deleteCollection(linkId);
+                TFile.builder().recycle();
+                TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toName(Constans.getCollectionFileName(linkId)).toFile();
+                TFile.builder().delete();
+                TFile.builder().recycle();
+            }
+        }
+        return false;
+    }
+
+    public static void getLabels() {
+
     }
 
     /**
@@ -383,5 +437,24 @@ public class Info {
 //        System.out.println(pre);
 //        Login.setUserId(1);
 //        addCollection("https://baidu.com","百度","搜索引擎");
+
+//        String info = "{\"userId\":2,\"vip\":\"n\",\"collections\":\",2:Spring集成,搜索引擎,3:Android,4:Android,5:在线工具,6:教程平台\",\"likes\":\"\",\"loves\":\"science,game,computer\",\"last\":1582037201566}";
+//        JSONObject object = JSONObject.parseObject(info);
+//        String collections = object.getString("collections");
+//        String linkFlag = "," + 2 + ":";
+//        if (collections.contains(linkFlag)) {
+//            String labels = collections.substring(collections.indexOf(linkFlag) + linkFlag.length());
+//            if (labels.contains(":")) {
+//                labels = labels.substring(0, labels.indexOf(":"));
+//                labels = labels.substring(0, labels.lastIndexOf(","));
+//            }
+//            String deleteFlag = linkFlag + labels;
+//            collections = collections.replace(deleteFlag, "");
+//        }
+//        info = info.substring(0, info.lastIndexOf("collections\":\"") + "collections\":\"".length()) + collections + info.substring(info.lastIndexOf("\",\"likes\":"));
+//        System.out.println("collections ===> " + collections);
+
+        String fileName = "4.json";
+        System.out.println(fileName.substring(0, fileName.indexOf(".")));
     }
 }

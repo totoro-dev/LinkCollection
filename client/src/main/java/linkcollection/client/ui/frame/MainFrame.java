@@ -7,6 +7,7 @@ import linkcollection.client.ui.bar.LeftSelectBar;
 import linkcollection.client.ui.bar.MainActionBar;
 import linkcollection.client.ui.widgets.Toast;
 import linkcollection.client.ui.widgets.WidgetConstant;
+import user.Info;
 import user.Login;
 import utils.CommonUtil;
 

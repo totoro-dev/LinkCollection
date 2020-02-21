@@ -84,6 +84,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
                         linkId = Long.parseLong(l.substring(l.lastIndexOf(":") + 1));
                         linkSearchInfo.setId(linkId);
                         updateQueue.add(linkSearchInfo);
+                        System.out.println("update : " + linkId);
                         return linkId + "";
                     }
                 }
@@ -201,11 +202,14 @@ public class LinkSearchServiceImpl implements LinkSearchService {
                     info.setLink(link);
                     info.setLinkId(searchInfo.getId());
                     // 插入新链接
-                    linkInfoService.insertNewLinkInfo(info);
-                    // 创建索引
-                    linkSearchRepository.save(searchInfo);
-                    // 存储热点标签信息
-                    new LinkLabelsStorage(searchInfo, linkInfoService);
+                    if (linkInfoService.insertNewLinkInfo(info)) {
+                        // 创建索引
+                        linkSearchRepository.save(searchInfo);
+                        // 存储热点标签信息
+                        new LinkLabelsStorage(searchInfo, linkInfoService);
+                        LinkInfoServiceImpl.lastLinkId++;
+                        id--;
+                    }
                     saveQueue.remove(i);
                     i = 0;
                     size = saveQueue.size();

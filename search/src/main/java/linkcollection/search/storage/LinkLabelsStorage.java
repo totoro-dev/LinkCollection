@@ -13,12 +13,13 @@ import top.totoro.file.util.Disk;
  * 信息：链接的热门标签
  */
 public class LinkLabelsStorage {
-    private static final String ROOT_PATH = "link-collection,link_labels";
+    private static final String ROOT_PATH = "link_collection,link_labels";
     private String fileName;
 
     public LinkLabelsStorage(LinkSearchInfo searchInfo, LinkInfoService service) {
         long linkId = searchInfo.getId();
         fileName = "" + linkId;
+        TFile.builder().recycle();
         TFile.builder().toDisk(Disk.TMP).toPath(ROOT_PATH).toFile().mkdirs();
         TFile.builder().toName(fileName).toFile();
         TWriter writer = new TWriter(TFile.getProperty());
@@ -77,7 +78,7 @@ public class LinkLabelsStorage {
                         }
                         if (l != null) {
                             // 添加的标签是否在已存储热门标签信息中的头部或尾部或中间或相同
-                            if (l.contains(","+label + ",") || l.endsWith(","+label)||l.startsWith(label+",")||l.equals(label)) {
+                            if (l.contains("," + label + ",") || l.endsWith("," + label) || l.startsWith(label + ",") || l.equals(label)) {
                                 isHad = true;
                                 // 需要将该标签增加一次使用次数
                                 up = label;
@@ -134,7 +135,7 @@ public class LinkLabelsStorage {
                 }
             }
             // 更新数据库 TODO:可以处理成只更新有改变的字段
-            service.updateAll(linkId,new String[]{l1,l2,l3});
+            service.updateAll(linkId, new String[]{l1, l2, l3});
             // 覆盖或写入链接信息文件
             writer.write(origin);
         }

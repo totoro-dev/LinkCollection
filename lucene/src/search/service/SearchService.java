@@ -6,10 +6,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -26,6 +23,7 @@ import top.totoro.file.util.Disk;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("ALL")
 public class SearchService {
 
     public static int maxResult = 5;
@@ -60,7 +58,7 @@ public class SearchService {
      */
     public boolean putCollectionInfo(CollectionInfo info) {
         try {
-            createIndex(info.getTitle(), Arrays.stream(info.getLabels()).collect(Collectors.joining(",")), info.getLink());
+            createIndex(info.getLinkId(), info.getTitle(), Arrays.stream(info.getLabels()).collect(Collectors.joining(",")), info.getLink());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,6 +68,25 @@ public class SearchService {
 
     private CollectionInfo[] getCollections(int limit) {
         return sort(limit);
+    }
+
+    public boolean deleteCollection(String linkId) {
+        TFile.builder().recycle();
+        //指定索引库存放的路径
+        TFile.builder().toDisk(Disk.TMP).toPath(Constans.SEARCH_PATH).toFile();
+        try {
+            Directory directory = FSDirectory.open(TFile.getProperty().getFile().toPath());
+            //参数：分析器对象
+            IndexWriterConfig config = new IndexWriterConfig(new MyIKAnalyzer(true));
+            //创建indexwriter对象
+            IndexWriter indexWriter = new IndexWriter(directory, config);
+            indexWriter.deleteDocuments(new Term("linkId", linkId));
+            indexWriter.forceMergeDeletes();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -96,6 +113,7 @@ public class SearchService {
     }
 
     private IndexSearcher getIndexSearcher() throws Exception {
+        TFile.builder().recycle();
         TFile.builder().toDisk(Disk.TMP).toPath(Constans.SEARCH_PATH).toFile();
         //指定索引库存放的路径
         Directory directory = FSDirectory.open(TFile.getProperty().getFile().toPath());
@@ -182,7 +200,8 @@ public class SearchService {
         return result;
     }
 
-    public void createIndex(String title, String labels, String link) throws Exception {
+    public void createIndex(String linkId, String title, String labels, String link) throws Exception {
+        TFile.builder().recycle();
         //指定索引库存放的路径
         TFile.builder().toDisk(Disk.TMP).toPath(Constans.SEARCH_PATH).toFile();
         Directory directory = FSDirectory.open(TFile.getProperty().getFile().toPath());
@@ -191,6 +210,7 @@ public class SearchService {
         //创建indexwriter对象
         IndexWriter indexWriter = new IndexWriter(directory, config);
         //第一个参数：域的名称，第二个参数：域的内容，第三个参数：是否存储
+        Field linkIdField = new TextField("linkId", linkId, Field.Store.YES);
         Field titleField = new TextField("title", title, Field.Store.YES);
         Field noteField = new TextField("labels", labels, Field.Store.YES);
         Field linkField = new StoredField("link", link);

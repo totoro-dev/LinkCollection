@@ -17,4 +17,9 @@ public class MyLocalSearch implements LocalSearch {
     public CollectionInfo[] searchInLocal(String key) {
         return ss.searchCollectionInfo(key);
     }
+
+    @Override
+    public boolean deleteCollection(String linkId) {
+        return ss.deleteCollection(linkId);
+    }
 }
