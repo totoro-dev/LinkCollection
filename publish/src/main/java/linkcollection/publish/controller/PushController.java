@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 @RestController("/")
 public class PushController {
@@ -22,10 +23,20 @@ public class PushController {
         for (String type :
                 ts) {
             LinkedList<Long> ids = pushService.selectAllByType(type);
-            for (long id :
-                    ids) {
+            for (long id : ids) {
+                // 对结果进行乱序处理
+                int random = 0;
+                String tmp = "";
+                if (result.size() > 0) {
+                    random = new Random().nextInt(result.size());
+                    tmp = result.get(random);
+                }
                 String linkInfo = LinkController.instance().searchById(id + "");
                 result.add(linkInfo);
+                if (result.size() > 1) {
+                    result.remove(random);
+                    result.add(tmp);
+                }
             }
         }
         return result;
