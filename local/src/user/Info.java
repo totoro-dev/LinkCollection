@@ -28,6 +28,7 @@ public class Info {
 
     private static final List<CollectionInfo> collectionInfos = new LinkedList<>();
     private static final List<Long> collectLinkIds = new LinkedList<>();
+    private static String mail = "";
 
     public static List<CollectionInfo> getCollectionInfos() {
         return collectionInfos;
@@ -44,9 +45,11 @@ public class Info {
      * @return 是否有数据更新，有则说明可以进行下一步的显示
      */
     public static boolean refreshCollectionInfo(String userId) {
+        String info = UserController.instance().userInfo(userId);
+        // 先验证是否有网络，有网络才更新本地数据
+        if (info == null || "".equals(info) || "null".equals(info)) return false;
         collectionInfos.clear();
         collectLinkIds.clear();
-        String info = UserController.instance().userInfo(userId);
         if (info == null || "".equals(info)) return false;
         TFile.builder().toDisk(Disk.TMP).toPath(Constans.INFO_PATH).toName(Constans.USER_INFO_FILE_NAME).toFile();
         if (!TFile.getProperty().exists()) TFile.builder().create();
@@ -132,6 +135,11 @@ public class Info {
      * @return
      */
     public static boolean addCollection(String link, String labels, String title) {
+        if (link == null || link.length() < 5) return false;
+        // 解决链接以“/”结尾时，导致同一链接可能会因为“/”被重复收藏的问题
+        if (link.endsWith("/")) {
+            link = link.substring(0, link.length() - 1);
+        }
         title = title.replace("<html><u>", "");
         title = title.replace("</html></u>", "");
         // 提交链接，获取链接ID
@@ -430,15 +438,44 @@ public class Info {
         return "否";
     }
 
+    /**
+     * 重置密码
+     *
+     * @param mail   将重置密码用户的邮箱
+     * @param newPwd 新密码
+     * @return 邮箱是否正确 && 验证码是否发送成功
+     */
+    public static boolean updatePwd(String mail, String newPwd) {
+        Info.mail = mail;
+        String result = UserController.instance().updatePwd(mail, newPwd);
+        return result != null && result.equals("验证码已发送");
+    }
+
+    /**
+     * 验证重置密码的邮箱
+     *
+     * @param code 验证码
+     * @return 验证码是否正确 && 密码是否重置成功
+     */
+    public static boolean checkUpdatePwdEmail(String code) {
+        if (!"".equals(mail)) {
+            String result = UserController.instance().checkMail(mail, code, "updatePwd");
+            return result != null && result.equals("验证成功");
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
+        // 测试获取推荐内容
 //        System.out.println(getPushContent("science,computer"));
+
+        // 测试本地更新收藏信息
 //        String info = "{\"userId\":1,\"vip\":\"n\",\"collections\":\",1:龙猫\",\"likes\":\"\",\"loves\":\"\",\"last\":1581769765796}";
 //        String coll = ",1:龙猫" + ",1:龙猫";
 //        String pre = info.substring(0, info.lastIndexOf("collections\":\"") + "collections\":\"".length()) + coll + info.substring(info.lastIndexOf("\",\"likes\":"));
 //        System.out.println(pre);
 //        Login.setUserId(1);
 //        addCollection("https://baidu.com","百度","搜索引擎");
-
 //        String info = "{\"userId\":2,\"vip\":\"n\",\"collections\":\",2:Spring集成,搜索引擎,3:Android,4:Android,5:在线工具,6:教程平台\",\"likes\":\"\",\"loves\":\"science,game,computer\",\"last\":1582037201566}";
 //        JSONObject object = JSONObject.parseObject(info);
 //        String collections = object.getString("collections");
@@ -455,7 +492,12 @@ public class Info {
 //        info = info.substring(0, info.lastIndexOf("collections\":\"") + "collections\":\"".length()) + collections + info.substring(info.lastIndexOf("\",\"likes\":"));
 //        System.out.println("collections ===> " + collections);
 
-        String fileName = "4.json";
-        System.out.println(fileName.substring(0, fileName.indexOf(".")));
+        // 测试getCollectInfo()方法中通过文件名获取linkId的正确性
+//        String fileName = "4.json";
+//        System.out.println(fileName.substring(0, fileName.indexOf(".")));
+
+        // 测试addCollection时传入的链接以“/”结尾时的处理
+        String link = "https://baidu.com/";
+        System.out.println(link.substring(0, link.length() - 1));
     }
 }
