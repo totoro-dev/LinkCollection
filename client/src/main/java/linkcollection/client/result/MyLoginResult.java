@@ -18,12 +18,25 @@ import user.Info;
 
 public class MyLoginResult implements LoginResult {
     @Override
-    public void loginError(String error) {
+    public void autoLoginError(String error) {
         switch (error) {
             case "请重新登录":
                 new LoginFrame(MainFrame.context);
             case "请注册或登录":
                 new LoginFrame(MainFrame.context);
+            default:
+                Toast.makeText(LoginFrame.context, error).show(Toast.LONG);
+                break;
+        }
+    }
+
+    @Override
+    public void loginError(String error) {
+        switch (error) {
+//            case "请重新登录":
+//                new LoginFrame(MainFrame.context);
+//            case "请注册或登录":
+//                new LoginFrame(MainFrame.context);
             default:
                 Toast.makeText(LoginFrame.context, error).show(Toast.LONG);
                 break;

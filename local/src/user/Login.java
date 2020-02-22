@@ -42,19 +42,20 @@ public class Login {
                         if (info != null) {
                             JSONObject object1 = JSONObject.parseObject(info);
                             userId = object1.getString("userId");
-                            Info.refreshCollectionInfo(userId);
+                            // 先通知自动登录成功，防止无网络情况导致启动过久
                             AppCommon.getLoginResult().loginSuccess(userId);
+                            Info.refreshCollectionInfo(userId);
                             return true;
                         }
                     }
                 }
             } else {
                 System.out.println("请重新登录");
-                AppCommon.getLoginResult().loginError("请重新登录");
+                AppCommon.getLoginResult().autoLoginError("请重新登录");
             }
         } else {
             TFile.builder().recycle();
-            AppCommon.getLoginResult().loginError("请注册或登录");
+            AppCommon.getLoginResult().autoLoginError("请注册或登录");
         }
         return false;
     }
