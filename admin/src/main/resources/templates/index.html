@@ -9,36 +9,47 @@
 </head>
 <body>
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="${showing}">
+    <div class="row">
+        <div class="col-md-3 col-md-offset-1" style="margin-top: 20px">
+            <div class="btn-group" style="margin-left: 15px">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                        th:text="${showing}">
+                    <span class="caret"></span>
+                </button>
+                <!--<li class="dropdown">-->
+                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="${showing}">-->
                 <!--<b class="caret"></b>-->
-            </a>
-            <ul class="dropdown-menu">
-                <li><a th:href="@{'show?type=science'}">科技</a></li>
-                <li><a th:href="@{'show?type=art'}">艺术</a></li>
-                <li><a th:href="@{'show?type=computer'}">计算机</a></li>
-                <li><a th:href="@{'show?type=healthy'}">健康</a></li>
-                <li><a th:href="@{'show?type=economic'}">经济</a></li>
-                <li><a th:href="@{'show?type=life'}">生活</a></li>
-                <li><a th:href="@{'show?type=game'}">游戏</a></li>
-                <li><a th:href="@{'show?type=eat'}">美食</a></li>
-                <li><a th:href="@{'show?type=tour'}">旅游</a></li>
-            </ul>
-            <a th:href="@{'to_add'}"><img src="../imgs/add_push.png"/></a>
-        </li>
-
-        <!--<img src="../imgs/delete_push.png"/>-->
-        <!--<img src="../imgs/edit_push.png"/>-->
+                <!--</a>-->
+                <ul class="dropdown-menu" role="menu">
+                    <li><a th:href="@{'show?type=science'}">科技</a></li>
+                    <li><a th:href="@{'show?type=art'}">艺术</a></li>
+                    <li><a th:href="@{'show?type=computer'}">计算机</a></li>
+                    <li><a th:href="@{'show?type=healthy'}">健康</a></li>
+                    <li><a th:href="@{'show?type=economic'}">经济</a></li>
+                    <li><a th:href="@{'show?type=life'}">生活</a></li>
+                    <li><a th:href="@{'show?type=game'}">游戏</a></li>
+                    <li><a th:href="@{'show?type=eat'}">美食</a></li>
+                    <li><a th:href="@{'show?type=tour'}">旅游</a></li>
+                </ul>
+                <!--</li>-->
+            </div>
+        </div>
+        <div class="col-md-4 col-md-offset-1" style="margin-top: 20px; margin-left: 15px">
+            <form th:action="@{'check?linkId='+${info.linkId}}" th:object="${info}">
+                链接ID<input type="text" th:field="${info.linkId}" style="margin-left: 10px"/>
+                <input type="submit" value="查看" style="margin-left: 10px"/>
+                <a th:href="@{'add?linkId='+${info.linkId}}" style="margin-left: 10px"><img src="../imgs/add_push.png"/></a>
+            </form>
+        </div>
     </div>
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-10 col-md-offset-1" style="margin-top: 20px">
         <table class="table table-bordered">
             <thead>
             <tr>
                 <!--<td>类型</td>-->
-                <td>LinkId</td>
-                <td>Title</td>
-                <td>Link</td>
+                <td>链接ID</td>
+                <td>标题</td>
+                <td>链接</td>
                 <td>操作</td>
             </tr>
             </thead>
@@ -46,7 +57,9 @@
             <tr th:each="info,infoStat : ${infos}">
                 <td th:text="${info.linkId}"></td>
                 <td th:text="${info.title}"></td>
-                <td th:text="${info.link}"></td>
+                <td>
+                    <a th:href="*{info.link}" th:text="${info.link}" target="_blank"></a>
+                </td>
                 <td><a th:href="@{'delete?linkId='+${info.linkId}}"><img src="../imgs/delete_push.png"/></a></td>
             </tr>
             </tbody>

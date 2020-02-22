@@ -21,6 +21,7 @@ public class PushServiceImpl implements PushService {
 
     @Override
     public boolean insert(String type, long linkId) {
+        if (selectAllByType(type).contains(linkId)) return false;
         return pushMapper.insert(type, linkId);
     }
 
