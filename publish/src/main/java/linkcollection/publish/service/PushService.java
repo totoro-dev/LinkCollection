@@ -7,4 +7,6 @@ public interface PushService {
     LinkedList<Long> selectAllByType(String type);
 
     boolean insert(String type, long linkId);
+
+    boolean delete(long linkId);
 }

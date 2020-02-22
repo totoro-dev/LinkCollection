@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LinkCollection后台管理</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="${showing}">
+                <!--<b class="caret"></b>-->
+            </a>
+            <ul class="dropdown-menu">
+                <li><a th:href="@{'show?type=science'}">科技</a></li>
+                <li><a th:href="@{'show?type=art'}">艺术</a></li>
+                <li><a th:href="@{'show?type=computer'}">计算机</a></li>
+                <li><a th:href="@{'show?type=healthy'}">健康</a></li>
+                <li><a th:href="@{'show?type=economic'}">经济</a></li>
+                <li><a th:href="@{'show?type=life'}">生活</a></li>
+                <li><a th:href="@{'show?type=game'}">游戏</a></li>
+                <li><a th:href="@{'show?type=eat'}">美食</a></li>
+                <li><a th:href="@{'show?type=tour'}">旅游</a></li>
+            </ul>
+            <a th:href="@{'to_add'}"><img src="../imgs/add_push.png"/></a>
+        </li>
+
+        <!--<img src="../imgs/delete_push.png"/>-->
+        <!--<img src="../imgs/edit_push.png"/>-->
+    </div>
+    <div class="col-md-8 col-md-offset-2">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <!--<td>类型</td>-->
+                <td>LinkId</td>
+                <td>Title</td>
+                <td>Link</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="info,infoStat : ${infos}">
+                <td th:text="${info.linkId}"></td>
+                <td th:text="${info.title}"></td>
+                <td th:text="${info.link}"></td>
+                <td><a th:href="@{'delete?linkId='+${info.linkId}}"><img src="../imgs/delete_push.png"/></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

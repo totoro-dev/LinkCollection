@@ -266,6 +266,7 @@ public class Info {
                     break;
                 case "art":
                     loves[i] = "艺术";
+                    break;
                 case "computer":
                     loves[i] = "计算机";
                     break;

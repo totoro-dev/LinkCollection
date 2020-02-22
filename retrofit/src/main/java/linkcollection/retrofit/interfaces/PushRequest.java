@@ -12,4 +12,7 @@ public interface PushRequest {
 
     @GET("/insert")
     Call<ResponseBody> insert(@Query("type") String type, @Query("linkId") String linkId);
+
+    @GET("/delete")
+    Call<ResponseBody> delete(@Query("linkId") String linkId);
 }

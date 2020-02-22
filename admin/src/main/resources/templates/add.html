@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加项</title>
+</head>
+<body>
+<div>
+    <form th:action="@{'add?linkId='+${info.linkId}}" th:object="${info}">
+        链接ID<input type="text" th:field="${info.linkId}"/>
+        <input type="submit"/>
+    </form>
+</div>
+</body>
+</html>

@@ -23,4 +23,9 @@ public class PushServiceImpl implements PushService {
     public boolean insert(String type, long linkId) {
         return pushMapper.insert(type, linkId);
     }
+
+    @Override
+    public boolean delete(long linkId) {
+        return pushMapper.delete(linkId);
+    }
 }

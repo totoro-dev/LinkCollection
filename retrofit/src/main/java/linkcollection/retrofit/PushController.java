@@ -40,4 +40,16 @@ public class PushController implements Push {
         return result;
     }
 
+    @Override
+    public String delete(String linkId) {
+        String result = "";
+        try {
+            result = ResponseUtil.response(pushRequest.delete(linkId)).get();
+//            AppCommon.getPublishResult().insertLinkToType(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

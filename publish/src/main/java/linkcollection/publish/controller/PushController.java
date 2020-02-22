@@ -35,4 +35,9 @@ public class PushController {
     public boolean insert(@RequestParam("type") String type, @RequestParam("linkId") long linkId) {
         return pushService.insert(type, linkId);
     }
+
+    @RequestMapping("delete")
+    public boolean delete(@RequestParam("linkId") long linkId) {
+        return pushService.delete(linkId);
+    }
 }
