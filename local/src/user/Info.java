@@ -104,6 +104,7 @@ public class Info {
         JSONObject object = JSONObject.parseObject(info);
         Login.setUserId(object.getLong("userId"));
         collectionInfos.clear();
+        collectLinkIds.clear();
         TFile.builder().toDisk(Disk.TMP).toPath(Constans.COLLECTION_PATH).toFile();
         File root = TFile.getProperty().getFile();
         File files[] = root.listFiles();
