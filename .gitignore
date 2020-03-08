@@ -32,3 +32,9 @@ build/
 
 ### out ###
 out/production/**
+
+### jar ###
+out/artifacts/userinfo_jar/**
+out/artifacts/search_jar/**
+out/artifacts/publish_jar/**
+out/artifacts/Start**

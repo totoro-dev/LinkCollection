@@ -206,7 +206,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
                         // 创建索引
                         linkSearchRepository.save(searchInfo);
                         // 存储热点标签信息
-                        new LinkLabelsStorage(searchInfo, linkInfoService);
+//                        new LinkLabelsStorage(searchInfo, linkInfoService);
                         LinkInfoServiceImpl.lastLinkId++;
                         id--;
                     }
@@ -217,6 +217,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
             } catch (Exception e) {
                 e.printStackTrace();
                 saveQueue.remove(index);
+                startService(); // 重启遍历服务
             } finally {
                 saveLock.unlock();
             }
@@ -238,7 +239,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
                     index = i;
                     LinkSearchInfo searchInfo = updateQueue.get(i);
                     // 存储热点标签信息
-                    new LinkLabelsStorage(searchInfo, linkInfoService);
+//                    new LinkLabelsStorage(searchInfo, linkInfoService);
                     updateQueue.remove(i);
                     i = 0;
                     size = updateQueue.size();
@@ -246,6 +247,7 @@ public class LinkSearchServiceImpl implements LinkSearchService {
             } catch (Exception e) {
                 e.printStackTrace();
                 updateQueue.remove(index);
+                startService(); // 重启遍历服务
             } finally {
                 updateLock.unlock();
             }
