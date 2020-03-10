@@ -46,6 +46,7 @@ public class MyLoginResult implements LoginResult {
     @Override
     public void loginSuccess(String s) {
         MainActionBar.setUserName(Info.getUserName());
+        Info.getCollectionInfo();
         CollectLabelAdapter.refreshInstance(Info.getCollectionInfos());
         LoveLabelAdapter.refreshInstance(Info.getLoveInfo());
         PushAdapter.refreshInstance(Info.getLoveInfo());
