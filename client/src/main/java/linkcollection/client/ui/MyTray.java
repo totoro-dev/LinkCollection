@@ -20,7 +20,7 @@ public class MyTray implements ActionListener, MouseListener {
     public MyTray(JFrame frame) {
         this.frame = frame;
         icon = new ImageIcon(this.getClass().getClassLoader().getResource(
-                "ui/img/app.png")).getImage();
+                "ui/img/sys.png")).getImage();
 
         if (SystemTray.isSupported()) {
             systemTray = SystemTray.getSystemTray();
